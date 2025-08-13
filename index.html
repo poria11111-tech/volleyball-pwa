@@ -1,0 +1,2287 @@
+
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>مدیریت باشگاه والیبال</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f7fa;
+    --card: #ffffff;
+    --muted: #6b7785;
+    --accent: #0ea5e9;
+    --accent-2: #34d399;
+    --text: #1f2a44;
+    --glass: rgba(255,255,255,0.7);
+    --shadow: rgba(20,30,40,0.1);
+    --danger: #dc2626;
+    --warning: #f59e0b;
+  }
+  * {
+    box-sizing: border-box;
+    font-family: "Vazirmatn", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  html, body {
+    height: 100%;
+    background: linear-gradient(180deg, var(--bg), #e6eff5);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 1200px;
+    margin: 16px auto;
+    padding: 16px;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    padding: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    box-shadow: 0 4px 12px var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .logo svg {
+    width: 48px;
+    height: 48px;
+  }
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+  }
+  .controls {
+    display: flex;
+    gap: 6px;
+    background: var(--card);
+    padding: 8px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px var(--shadow);
+  }
+  .controls .btn {
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: all 0.3s;
+  }
+  .controls .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(14, 165, 233, 0.2);
+  }
+  .mobile-menu {
+    display: flex;
+    gap: 8px;
+    background: var(--card);
+    padding: 8px;
+    border-radius: 24px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    justify-content: space-around;
+    width: 100%;
+  }
+  .menu-icon-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: white;
+    transition: all 0.3s;
+  }
+  .menu-icon-btn:hover {
+    transform: scale(1.1);
+  }
+  .menu-icon-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+  .btn {
+    background: var(--card);
+    border: 1px solid rgba(0,0,0,0.06);
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: transform 0.2s;
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+  .btn.primary {
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    color: #fff;
+    border: none;
+  }
+  .btn.danger {
+    background: var(--danger);
+    color: #fff;
+  }
+  .btn.warning {
+    background: var(--warning);
+    color: #fff;
+  }
+  .btn.small {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .card {
+    background: var(--card);
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px var(--shadow);
+  }
+  .section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .players-preview, .full-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .player-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,0.04);
+    background: var(--glass);
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+  .player-row:hover {
+    background: rgba(14,165,233,0.05);
+  }
+  .player-thumb {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #e2e8f0;
+    flex: 0 0 56px;
+  }
+  .player-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .meta {
+    flex: 1;
+    min-width: 0;
+  }
+  .meta strong {
+    display: block;
+    font-size: 16px;
+  }
+  .meta small {
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .badge {
+    background: var(--accent);
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .badge.warning {
+    background: var(--warning);
+  }
+  .badge.danger {
+    background: var(--danger);
+  }
+  .muted {
+    color: var(--muted);
+  }
+  .search, .input, input[type='text'], input[type='number'], select {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.06);
+    background: var(--glass);
+    font-size: 14px;
+  }
+  .jalali-input {
+    cursor: pointer;
+  }
+  label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+  }
+  .modal {
+    width: 90%;
+    max-width: 600px;
+    background: var(--card);
+    border-radius: 12px;
+    padding: 20px;
+    max-height: 90vh;
+    overflow: auto;
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 16px;
+  }
+  .hide {
+    display: none;
+  }
+  .jalali-calendar {
+    position: absolute;
+    background: var(--card);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 10px 30px var(--shadow);
+    z-index: 1200;
+    direction: ltr;
+    animation: fadeIn 0.3s ease;
+  }
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 36px);
+    gap: 8px;
+  }
+  .cal-day {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 14px;
+  }
+  .cal-day:hover {
+    background: rgba(14,165,233,0.2);
+  }
+  .cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-weight: 600;
+    direction: rtl;
+  }
+  .cal-year-btn {
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 6px;
+    background: var(--glass);
+    border: 1px solid rgba(0,0,0,0.1);
+    cursor: pointer;
+  }
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+    text-align: center;
+  }
+  .stat-item {
+    flex: 1;
+    background: var(--glass);
+    padding: 12px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px var(--shadow);
+    min-width: 120px;
+  }
+  .stat-item strong {
+    display: block;
+    font-size: 24px;
+  }
+  .stat-item small {
+    color: var(--muted);
+  }
+  .score-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--accent-2);
+  }
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .topbar > div {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .view-more {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 13px;
+    margin-top: 8px;
+    display: inline-block;
+  }
+  @media (max-width: 768px) {
+    .wrap { padding: 12px; }
+    .grid { grid-template-columns: 1fr; }
+    .controls { display: none; }
+    .mobile-menu { display: flex; }
+    .form-row { grid-template-columns: 1fr; }
+    .cal-grid { grid-template-columns: repeat(7, 32px); }
+    .cal-day { width: 32px; height: 32px; font-size: 13px; }
+    .player-row { flex-wrap: wrap; }
+    .player-row > div:last-child { flex-basis: 100%; display: flex; justify-content: center; gap: 8px; margin-top: 8px; }
+    .topbar { flex-direction: column; align-items: stretch; }
+    .topbar > div { width: 100%; }
+  }
+  @media print {
+    .no-print { display: none; }
+    .modal { box-shadow: none; border: none; }
+    .player-row { page-break-inside: avoid; }
+  }
+</style>
+
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0ea5e9">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="logo" title="والیبال پوریا">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="11" fill="#fff" opacity="0.9"/>
+          <path d="M5 8c2-2 6-2.5 11-1.5" stroke="#0ea5e9" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M4 15c2 2 6 3 11 2" stroke="#34d399" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M12 6c3 1 5 3 6 6" stroke="#0ea5e9" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="12" cy="12" r="2" fill="#34d399" opacity="0.5"/>
+        </svg>
+      </div>
+      <div>
+        <h1>مدیریت والیبال پوریا</h1>
+        <div class="muted" style="font-size: 14px;">مدیریت بازیکنان، جلسات و شهریه</div>
+      </div>
+    </div>
+    <div class="controls" id="desktopControls">
+      <input id="quickSearch" class="search" placeholder="جستجوی سریع..." />
+      <button id="homeBtn" class="btn">خانه</button>
+      <button id="playersBtn" class="btn">بازیکنان</button>
+      <button id="coachesBtn" class="btn">مربیان</button>
+      <button id="sessionsBtn" class="btn">جلسات</button>
+      <button id="paymentsBtn" class="btn">شهریه</button>
+      <button id="insuranceBtn" class="btn">مدیریت بیمه‌ها</button>
+    </div>
+  </header>
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="menu-icon-btn" id="homeMenu" title="خانه">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="#fff" stroke-width="2" fill="none"/></svg>
+    </button>
+    <button class="menu-icon-btn" id="playersMenu" title="بازیکنان">
+      <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="#fff" stroke-width="2" fill="none"/><circle cx="8.5" cy="7" r="4" stroke="#fff" stroke-width="2" fill="none"/><path d="M20 8v6M23 11h-6" stroke="#fff" stroke-width="2" fill="none"/></svg>
+    </button>
+    <button class="menu-icon-btn" id="coachesMenu" title="مربیان">
+      <svg viewBox="0 0 24 24"><path d="M17 21h-10a2 2 0 0 1-2-2v-14a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z" stroke="#fff" stroke-width="2" fill="none"/><path d="M12 17v-6m-3 3h6" stroke="#fff" stroke-width="2" fill="none"/></svg>
+    </button>
+    <button class="menu-icon-btn" id="sessionsMenu" title="جلسات">
+      <svg viewBox="0 0 24 24"><path d="M19 4H5a2 2 0 0 1-2 2v14a2 2 0 0 1 2 2h14a2 2 0 0 1 2-2V6a2 2 0 0 1-2-2z" stroke="#fff" stroke-width="2" fill="none"/><path d="M16 2v4" stroke="#fff" stroke-width="2" fill="none"/><path d="M8 2v4" stroke="#fff" stroke-width="2" fill="none"/><path d="M3 10h18" stroke="#fff" stroke-width="2" fill="none"/></svg>
+    </button>
+    <button class="menu-icon-btn" id="paymentsMenu" title="مدیریت شهریه">
+      <svg viewBox="0 0 24 24"><path d="M12 2v20" stroke="#fff" stroke-width="2" fill="none"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="#fff" stroke-width="2" fill="none"/></svg>
+    </button>
+    <button class="menu-icon-btn" id="insuranceMenu" title="مدیریت بیمه‌ها">
+      <svg viewBox="0 0 24 24"><path d="M12 2l10 6v14H2V8z" stroke="#fff" stroke-width="2" fill="none"/><path d="M8 13l3 3 5-5" stroke="#fff" stroke-width="2" fill="none"/></svg>
+    </button>
+  </div>
+
+  <main>
+    <div id="view-root">
+      <section id="view-home">
+        <div class="grid">
+          <div class="card">
+            <div class="section-title">
+              <h3>آخرین بازیکنان</h3>
+              <button id="addPlayerBtn" class="btn primary">بازیکن جدید</button>
+            </div>
+            <div id="playersPreview" class="players-preview"></div>
+            <div style="margin-top: 12px; text-align: center;">
+              <button id="showAllPlayersBtn" class="btn">همه بازیکنان</button>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="section-title">
+              <h3>آخرین جلسات</h3>
+              <button id="addSessionFromHomeBtn" class="btn primary">جلسه جدید</button>
+            </div>
+            <div id="sessionsPreview" class="players-preview"></div>
+            <div style="margin-top: 12px; text-align: center;">
+              <button id="showAllSessionsBtn" class="btn">همه جلسات</button>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="section-title">
+              <h3>آخرین پرداخت‌ها</h3>
+            </div>
+            <div id="paymentsPreview" class="players-preview"></div>
+            <div style="margin-top: 12px; text-align: center;">
+              <button id="showAllPaymentsBtn" class="btn">همه پرداخت‌ها</button>
+            </div>
+          </div>
+          
+          <div class="card" style="border-left: 4px solid var(--danger);">
+            <div class="section-title">
+              <h3>بیمه‌های منقضی</h3>
+            </div>
+            <div id="expiredInsurances" class="players-preview"></div>
+            <div style="margin-top: 12px; text-align: center;">
+              <button id="showAllInsurancesBtn" class="btn danger">مدیریت بیمه‌ها</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card" style="margin-top: 16px;">
+          <div class="section-title">
+            <h3>آمار کلی</h3>
+          </div>
+          <div id="statsContainer" class="stats"></div>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+          <button id="backupBtn" class="btn">بک‌آپ گیری</button>
+          <button id="restoreBtn" class="btn">وارد کردن بک‌آپ</button>
+        </div>
+      </section>
+
+      <section id="view-players" class="hide">
+        <div class="card">
+          <div class="topbar">
+            <div>
+              <input id="playersSearch" class="search" placeholder="جستجوی سریع..." />
+              <select id="filterCategory" class="input"><option value="">همه رده‌ها</option></select>
+              <select id="filterInsurance" class="input"><option value="">همه بیمه‌ها</option><option value="expired">بیمه منقضی</option></select>
+              <select id="sortPlayers" class="input"><option value="new">جدیدترین</option><option value="score">امتیاز</option><option value="name">نام</option></select>
+            </div>
+            <button id="openAddPlayerFromList" class="btn primary">بازیکن جدید</button>
+          </div>
+          <div id="playersList" class="full-list"></div>
+        </div>
+      </section>
+
+      <section id="view-coaches" class="hide">
+        <div class="card">
+          <div class="topbar">
+            <h3>مربیان</h3>
+            <button id="addCoachBtn" class="btn primary">مربی جدید</button>
+          </div>
+          <div id="coachesList" class="full-list"></div>
+        </div>
+      </section>
+
+      <section id="view-sessions" class="hide">
+        <div class="card">
+          <div class="topbar">
+            <h3>مدیریت جلسات</h3>
+            <div>
+              <input id="sessionTitle" class="input" placeholder="عنوان جلسه (اختیاری)" />
+              <input id="sessionDate" class="input jalali-input" placeholder="تاریخ جلسه (YYYY/MM/DD)" />
+              <select id="sessionCategory" class="input"><option value="">همه رده‌ها</option></select>
+              <select id="sessionCoach" class="input"><option value="">بدون مربی</option></select>
+              <button id="createSessionBtn" class="btn primary">ایجاد جلسه</button>
+            </div>
+          </div>
+          <div id="sessionsList" class="full-list"></div>
+        </div>
+      </section>
+
+      <section id="view-payments" class="hide">
+        <div class="card">
+          <div class="topbar">
+            <h3>مدیریت شهریه</h3>
+          </div>
+          <div style="display: grid; gap: 12px; margin-top: 12px;">
+            <input id="paymentPlayerSearch" class="input" placeholder="جستجوی بازیکن..." />
+            <select id="paymentPlayer" class="input"><option value="">انتخاب بازیکن</option></select>
+            <div style="display: grid; gap: 8px;">
+              <input id="paymentDate" class="input jalali-input" placeholder="تاریخ پرداخت (YYYY/MM/DD)" />
+              <div style="display: flex; gap: 8px;">
+                <select id="paymentMonth" class="input"></select>
+                <select id="paymentYear" class="input"></select>
+              </div>
+              <input id="paymentAmount" class="input" placeholder="مبلغ (تومان)" type="number" />
+              <select id="paymentType" class="input"><option value="">نوع پرداخت</option><option>نقد</option><option>رسید</option><option>کارت به کارت</option></select>
+            </div>
+            <button id="addPaymentBtn" class="btn primary">ثبت پرداخت</button>
+          </div>
+          <hr style="margin: 12px 0;" />
+          <div style="display: flex; gap: 8px;">
+            <button id="showDebtorsBtn" class="btn warning">نمایش بدهکاران آخرین دوره</button>
+            <button id="reportPaymentsBtn" class="btn">گزارش پرداخت</button>
+          </div>
+          <div id="paymentList" class="full-list"></div>
+        </div>
+      </section>
+
+      <section id="view-insurance" class="hide">
+        <div class="card">
+          <div class="topbar">
+            <h3>مدیریت بیمه‌ها</h3>
+          </div>
+          <div id="insuranceList" class="full-list"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="jalaliCalendar" class="jalali-calendar hide" aria-hidden="true"></div>
+  <div id="modalBackdrop" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog">
+      <div id="modalContent"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Utility Helpers */
+function qs(sel, root) { return (root || document).querySelector(sel); }
+function qsa(sel, root) { return Array.from((root || document).querySelectorAll(sel)); }
+function uid(prefix) { return (prefix || 'id') + '_' + Date.now() + '_' + Math.floor(Math.random() * 900); }
+function escapeHtml(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;'); }
+function normPersian(s) { return String(s || '').replace(/ي/g, 'ی').replace(/ك/g, 'ک').replace(/[\u200c\s]+/g, ' ').trim().toLowerCase(); }
+
+/* Jalali <-> Gregorian Utils */
+function gregorian_to_jalali(gy, gm, gd) {
+  gy = parseInt(gy); gm = parseInt(gm); gd = parseInt(gd);
+  var g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+  var jy = (gy <= 1600) ? 0 : 979;
+  gy -= (gy <= 1600) ? 621 : 1600;
+  var gy2 = (gm > 2) ? (gy + 1) : gy;
+  var days = (365 * gy) + (parseInt((gy2 + 3) / 4)) - (parseInt((gy2 + 99) / 100))
+          + (parseInt((gy2 + 399) / 400)) - 80 + gd + g_d_m[gm - 1];
+  jy += 33 * (parseInt(days / 12053));
+  days %= 12053;
+  jy += 4 * (parseInt(days / 1461));
+  days %= 1461;
+  jy += parseInt((days - 1) / 365);
+  if (days > 365) days = (days - 1) % 365;
+  var jm = (days < 186) ? 1 + parseInt(days / 31) : 7 + parseInt((days - 186) / 30);
+  var jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
+  return [jy, jm, jd];
+}
+function jalali_to_gregorian(jy, jm, jd) {
+  jy = parseInt(jy); jm = parseInt(jm); jd = parseInt(jd);
+  var gy = (jy <= 979) ? 621 : 1600;
+  jy -= (jy <= 979) ? 0 : 979;
+  var days = (365 * jy) + ((parseInt(jy / 33)) * 8) + (parseInt(((jy % 33) + 3) / 4))
+          + 78 + jd + ((jm < 7) ? (jm - 1) * 31 : ((jm - 7) * 30) + 186);
+  gy += 400 * (parseInt(days / 146097));
+  days %= 146097;
+  if (days > 36524) {
+      gy += 100 * (parseInt(--days / 36524));
+      days %= 36524;
+      if (days >= 365) days++;
+  }
+  gy += 4 * (parseInt((days) / 1461));
+  days %= 1461;
+  gy += parseInt((days - 1) / 365);
+  if (days > 365) days = (days - 1) % 365;
+  var gd = days + 1;
+  var sal_a = [0, 31, ((gy % 4 == 0 && gy % 100 != 0) || (gy % 400 == 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  var gm;
+  for (gm = 0; gm < 13; gm++) {
+      var v = sal_a[gm];
+      if (gd <= v) break;
+      gd -= v;
+  }
+  return [gy, gm, gd];
+}
+function isoToJalali(iso) {
+  let d = new Date(iso);
+  if (isNaN(d)) return '';
+  let j = gregorian_to_jalali(d.getFullYear(), d.getMonth() + 1, d.getDate());
+  return j[0] + '/' + String(j[1]).padStart(2, '0') + '/' + String(j[2]).padStart(2, '0');
+}
+function jalaliToISO(jalaliStr) {
+  if (!jalaliStr || !jalaliStr.match(/^\d{4}\/\d{2}\/\d{2}$/)) return new Date().toISOString();
+  let parts = jalaliStr.split('/').map(Number);
+  let g = jalali_to_gregorian(parts[0], parts[1], parts[2]);
+  return new Date(g[0], g[1] - 1, g[2]).toISOString();
+}
+function todayJalali() {
+  let d = new Date();
+  let r = gregorian_to_jalali(d.getFullYear(), d.getMonth() + 1, d.getDate());
+  return r[0] + '/' + String(r[1]).padStart(2, '0') + '/' + String(r[2]).padStart(2, '0');
+}
+function isInsuranceExpired(insuranceDate) {
+  if (!insuranceDate) return false;
+  let parts = insuranceDate.split('/').map(Number);
+  let g = jalali_to_gregorian(parts[0], parts[1], parts[2]);
+  let insurance = new Date(g[0], g[1] - 1, g[2]);
+  insurance.setFullYear(insurance.getFullYear() + 1);
+  let today = new Date();
+  return today > insurance;
+}
+
+/* Image Helper */
+function imageFileToDataURL(file, maxKB) {
+  return new Promise((resolve, reject) => {
+    try {
+      let fr = new FileReader();
+      fr.onload = (e) => {
+        let img = new Image();
+        img.onload = () => {
+          let MAX_WIDTH = 800;
+          let w = img.width, h = img.height;
+          if (w > MAX_WIDTH) { h = Math.round(h * (MAX_WIDTH / w)); w = MAX_WIDTH; }
+          let canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          let ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          let quality = 0.8;
+          let data = canvas.toDataURL('image/jpeg', quality);
+          while ((data.length / 1024) > (maxKB || 500) && quality > 0.3) {
+            quality -= 0.1;
+            data = canvas.toDataURL('image/jpeg', quality);
+          }
+          resolve(data);
+        };
+        img.onerror = () => reject(new Error('invalid image'));
+        img.src = e.target.result;
+      };
+      fr.onerror = () => reject(new Error('file read error'));
+      fr.readAsDataURL(file);
+    } catch (err) { reject(err); }
+  });
+}
+
+/* Storage & State */
+const STORAGE_KEY = 'vb_dashboard_v7';
+let state = { players: [], coaches: [], sessions: [], payments: [] };
+
+function loadState() {
+  try {
+    let raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) state = JSON.parse(raw);
+    else seedSample();
+  } catch (e) {
+    console.error(e);
+    seedSample();
+  }
+}
+function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+function seedSample() {
+  state.players = state.players || [];
+  if (state.players.length === 0) {
+    let now = Date.now();
+    state.players.push({
+      id: uid('p'), name: 'پوریا رضایی', birthdate: '1377/03/18', joinDate: todayJalali(),
+      category: 'جوانان', favoritePosition: 'ضربه زن', phone: '09120000001', fatherName: 'حسین',
+      photo: '', height: 185, weight: 78, insuranceDate: todayJalali(),
+      scores: { spike: 7, receive: 6, block: 5, defense: 6, positioning: 7, serve: 8, run: 7, jump: 8 },
+      createdAt: new Date(now - 900000).toISOString()
+    });
+    state.players.push({
+      id: uid('p'), name: 'علی مرادی', birthdate: '1384/01/31', joinDate: todayJalali(),
+      category: 'نوجوانان', favoritePosition: 'لیبرو', phone: '09120000002', fatherName: 'محمود',
+      photo: '', height: 175, weight: 70, insuranceDate: todayJalali(),
+      scores: { spike: 5, receive: 8, block: 4, defense: 7, positioning: 6, serve: 6, run: 8, jump: 7 },
+      createdAt: new Date(now - 800000).toISOString()
+    });
+  }
+  state.coaches = state.coaches || [];
+  if (state.coaches.length === 0) {
+    state.coaches.push({
+      id: uid('c'), name: 'محمد حسینی', title: 'مربی ارشد', phone: '09120000003',
+      photo: '', createdAt: new Date().toISOString()
+    });
+  }
+  state.sessions = state.sessions || [];
+  state.payments = state.payments || [];
+  saveState();
+}
+
+/* Score & Age Helpers */
+function calcAge(birthJalali) {
+  if (!birthJalali) return null;
+  let parts = String(birthJalali).split('/');
+  if (parts.length < 3) return null;
+  let jy = parseInt(parts[0], 10);
+  let jm = parseInt(parts[1], 10);
+  let jd = parseInt(parts[2], 10);
+  let today = todayJalali().split('/').map(Number);
+  let age = today[0] - jy;
+  if (today[1] < jm || (today[1] === jm && today[2] < jd)) age--;
+  return age;
+}
+function calcAverageScore(p) {
+  let scores = p.scores || {};
+  let keys = Object.keys(scores);
+  if (keys.length === 0) return 0;
+  let total = keys.reduce((sum, key) => sum + (parseFloat(scores[key]) || 0), 0);
+  return Math.round(total / keys.length) || 0;
+}
+
+/* Renderers */
+loadState();
+const views = {
+  home: qs('#view-home'),
+  players: qs('#view-players'),
+  coaches: qs('#view-coaches'),
+  sessions: qs('#view-sessions'),
+  payments: qs('#view-payments'),
+  insurance: qs('#view-insurance')
+};
+
+function showView(name) {
+  Object.keys(views).forEach(k => views[k]?.classList.add('hide'));
+  views[name]?.classList.remove('hide');
+  if (name === 'home') renderHome();
+  if (name === 'players') renderPlayersPage();
+  if (name === 'coaches') renderCoaches();
+  if (name === 'sessions') renderSessionsPage();
+  if (name === 'payments') renderPaymentsPage();
+  if (name === 'insurance') renderInsurancePage();
+}
+
+function renderHome() {
+  // آخرین بازیکنان
+  let preview = qs('#playersPreview');
+  preview.innerHTML = '';
+  let last5 = state.players.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 5);
+  if (last5.length === 0) {
+    preview.innerHTML = '<div class="muted" style="padding: 14px; text-align: center;">هنوز بازیکنی ثبت نشده.</div>';
+  }
+  last5.forEach(p => {
+    let row = document.createElement('div'); row.className = 'player-row';
+    let imgHtml = p.photo ? `<img src="${p.photo}" alt="avatar">` : `<svg width="36" height="36" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e2e8f0"/></svg>`;
+    row.innerHTML = `
+      <div class="player-thumb">${imgHtml}</div>
+      <div class="meta"><strong>${escapeHtml(p.name)}</strong><small>${p.category || '—'} • سن: ${calcAge(p.birthdate) || '—'}</small></div>
+      <div class="badge">${calcAverageScore(p)}</div>
+    `;
+    row.addEventListener('click', () => openPlayerProfile(p.id));
+    preview.appendChild(row);
+  });
+
+  // آخرین جلسات
+  let sessionsPreview = qs('#sessionsPreview');
+  sessionsPreview.innerHTML = '';
+  let lastSessions = state.sessions.slice().sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
+  if (lastSessions.length === 0) {
+    sessionsPreview.innerHTML = '<div class="muted" style="padding: 14px; text-align: center;">هنوز جلسه‌ای ثبت نشده.</div>';
+  } else {
+    lastSessions.forEach(s => {
+      let row = document.createElement('div'); row.className = 'player-row';
+      let coach = state.coaches.find(c => c.id === s.coachId);
+      row.innerHTML = `
+        <div class="meta"><strong>${escapeHtml(s.title || 'جلسه تمرین')}</strong><small>${isoToJalali(s.date)} • ${s.category || '—'} • ${coach?.name || 'بدون مربی'}</small></div>
+      `;
+      row.addEventListener('click', () => openSessionAttendance(s.id));
+      sessionsPreview.appendChild(row);
+    });
+  }
+
+  // آخرین پرداخت‌ها
+  let paymentsPreview = qs('#paymentsPreview');
+  paymentsPreview.innerHTML = '';
+  let lastPayments = state.payments.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 3);
+  if (lastPayments.length === 0) {
+    paymentsPreview.innerHTML = '<div class="muted" style="padding: 14px; text-align: center;">هنوز پرداختی ثبت نشده.</div>';
+  } else {
+    lastPayments.forEach(p => {
+      let row = document.createElement('div'); row.className = 'player-row';
+      let player = state.players.find(pl => pl.id === p.playerId);
+      row.innerHTML = `
+        <div class="meta"><strong>${player ? escapeHtml(player.name) : '—'}</strong><small>${isoToJalali(p.date)} • ${Number(p.amount).toLocaleString()} تومان</small></div>
+      `;
+      paymentsPreview.appendChild(row);
+    });
+  }
+
+  // بیمه‌های منقضی
+  let expiredInsurances = qs('#expiredInsurances');
+  expiredInsurances.innerHTML = '';
+  let expired = state.players.filter(p => isInsuranceExpired(p.insuranceDate)).slice(0, 3);
+  if (expired.length === 0) {
+    expiredInsurances.innerHTML = '<div class="muted" style="padding: 14px; text-align: center;">بیمه منقضی شده‌ای وجود ندارد.</div>';
+  } else {
+    expired.forEach(p => {
+      let row = document.createElement('div'); row.className = 'player-row';
+      let imgHtml = p.photo ? `<img src="${p.photo}" alt="avatar">` : `<svg width="36" height="36" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e2e8f0"/></svg>`;
+      row.innerHTML = `
+        <div class="player-thumb">${imgHtml}</div>
+        <div class="meta"><strong>${escapeHtml(p.name)}</strong><small>${p.category || '—'} • ${p.insuranceDate || '—'}</small></div>
+        <div class="badge danger">منقضی</div>
+      `;
+      row.addEventListener('click', () => openPlayerProfile(p.id));
+      expiredInsurances.appendChild(row);
+    });
+  }
+
+  renderStats();
+}
+
+function calculateLastPeriodSum() {
+  let todayJ = todayJalali().split('/').map(Number);
+  let curMonth = todayJ[1];
+  let curYear = todayJ[0];
+  let sum = state.payments.reduce((total, pay) => {
+    if (pay.paymentMonth === curMonth && pay.paymentYear === curYear) {
+      return total + pay.amount;
+    }
+    return total;
+  }, 0);
+  return sum.toLocaleString();
+}
+
+function renderStats() {
+  let container = qs('#statsContainer');
+  container.innerHTML = '';
+  
+  let categories = ['نوآموز', 'مینی والیبال', 'آینده‌سازان', 'نوجوانان', 'جوانان', 'امید', 'بزرگسال'];
+  let byCategory = {};
+  categories.forEach(cat => {
+    byCategory[cat] = state.players.filter(p => p.category === cat).length;
+  });
+
+  let detailsHtml = categories.map(cat => byCategory[cat] > 0 ? `${cat}: ${byCategory[cat]}` : null).filter(Boolean).join('<br>');
+
+  let statsData = [
+    { label: 'کل بازیکنان', value: state.players.length, details: detailsHtml },
+    { label: 'کل جلسات', value: state.sessions.length },
+    { label: 'کل مربیان', value: state.coaches.length },
+    { label: 'جمع شهریه آخرین دوره', value: calculateLastPeriodSum() },
+    { label: 'بیمه منقضی', value: state.players.filter(p => isInsuranceExpired(p.insuranceDate)).length }
+  ];
+
+  statsData.forEach(stat => {
+    let item = document.createElement('div');
+    item.className = 'stat-item';
+    let innerHtml = `<strong>${stat.value}</strong><small>${stat.label}</small>`;
+    if (stat.details) {
+      innerHtml += `<div style="font-size: 12px; line-height: 1.4; margin-top: 4px;">${stat.details}</div>`;
+    }
+    item.innerHTML = innerHtml;
+    container.appendChild(item);
+  });
+}
+
+function populateCategoryFilter(selectEl) {
+  let cats = Array.from(new Set(state.players.map(p => p.category).filter(Boolean)));
+  selectEl.innerHTML = '<option value="">همه رده‌ها</option>';
+  cats.forEach(c => {
+    let o = document.createElement('option');
+    o.value = c;
+    o.textContent = c;
+    selectEl.appendChild(o);
+  });
+}
+
+function populateCoachSelect(selectEl) {
+  selectEl.innerHTML = '<option value="">بدون مربی</option>';
+  state.coaches.forEach(c => {
+    let o = document.createElement('option');
+    o.value = c.id;
+    o.textContent = c.name;
+    selectEl.appendChild(o);
+  });
+}
+
+function renderScoreFields(category) {
+  let scoresContainer = qs('#scoresContainer');
+  scoresContainer.innerHTML = '';
+  
+  let scoresConfig = {
+    'نوآموز': [],
+    'مینی والیبال': ['پنجه', 'ساعد', 'سرویس', 'اسبک'],
+    'آینده‌سازان': ['پنجه', 'ساعد', 'سرویس', 'اسبک', 'دفاع'],
+    'نوجوانان': ['اسپک', 'دریافت', 'دفاع', 'سرویس', 'پرش'],
+    'جوانان': ['اسپک', 'دریافت', 'دفاع', 'سرویس', 'پرش', 'جاگیری'],
+    'امید': ['اسپک', 'دریافت', 'دفاع', 'سرویس', 'پرش', 'جاگیری', 'دویدن'],
+    'بزرگسال': ['اسپک', 'دریافت', 'دفاع', 'سرویس', 'پرش', 'جاگیری', 'دویدن', 'قدرت']
+  };
+
+  if (category && scoresConfig[category] && scoresConfig[category].length > 0) {
+    scoresContainer.style.display = 'grid';
+    scoresContainer.style.gridTemplateColumns = '1fr 1fr';
+    scoresContainer.style.gap = '12px';
+    scoresConfig[category].forEach(score => {
+      let div = document.createElement('div');
+      div.innerHTML = `
+        <label for="score_${score}">${score}</label>
+        <input id="score_${score}" type="number" min="0" max="10" class="input" placeholder="0-10">
+      `;
+      scoresContainer.appendChild(div);
+    });
+  } else {
+    scoresContainer.innerHTML = '<p class="muted" style="padding: 12px; text-align: center; grid-column: span 2;">امتیازدهی برای این رده فعال نیست</p>';
+  }
+}
+
+function renderPlayersPage() {
+  let list = qs('#playersList');
+  list.innerHTML = '';
+  let q = normPersian(qs('#playersSearch').value || '');
+  let cat = qs('#filterCategory').value;
+  let insurance = qs('#filterInsurance').value;
+  let sort = qs('#sortPlayers').value;
+  let arr = state.players.slice();
+  if (q) arr = arr.filter(p => normPersian(p.name).includes(q) || normPersian(p.favoritePosition || '').includes(q));
+  if (cat) arr = arr.filter(p => p.category === cat);
+  if (insurance === 'expired') arr = arr.filter(p => isInsuranceExpired(p.insuranceDate));
+  if (sort === 'new') arr.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  if (sort === 'score') arr.sort((a, b) => calcAverageScore(b) - calcAverageScore(a));
+  if (sort === 'name') arr.sort((a, b) => a.name.localeCompare(b.name, 'fa'));
+  if (arr.length === 0) {
+    list.innerHTML = '<div class="muted">موردی یافت نشد.</div>';
+    populateCategoryFilter(qs('#filterCategory'));
+    return;
+  }
+
+  arr.forEach(p => {
+    let node = document.createElement('div');
+    node.className = 'player-row';
+    let imgHtml = p.photo ? `<img src="${p.photo}">` : `<svg width="36" height="36" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e2e8f0"/></svg>`;
+    let expired = isInsuranceExpired(p.insuranceDate);
+    node.innerHTML = `
+      <div class="player-thumb">${imgHtml}</div>
+      <div class="meta"><strong>${escapeHtml(p.name)}</strong><small>${p.category || '—'} • سن: ${calcAge(p.birthdate) || '—'} • ${p.favoritePosition || '—'}</small></div>
+      <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+        <div class="badge ${expired ? 'danger' : ''}">${calcAverageScore(p)}</div>
+        <button class="btn small" data-action="view" data-id="${p.id}">پروفایل</button>
+        <button class="btn small" data-action="edit" data-id="${p.id}">ویرایش</button>
+        <button class="btn small" data-action="pay" data-id="${p.id}">پرداخت</button>
+        <button class="btn small" data-action="del" data-id="${p.id}" style="background: transparent;">حذف</button>
+      </div>
+    `;
+    node.querySelector('[data-action="view"]').addEventListener('click', () => openPlayerProfile(p.id));
+    node.querySelector('[data-action="edit"]').addEventListener('click', () => openPlayerModal(p));
+    node.querySelector('[data-action="pay"]').addEventListener('click', () => openPaymentModal(p.id));
+    node.querySelector('[data-action="del"]').addEventListener('click', () => {
+      if (confirm('حذف بازیکن؟')) {
+        state.players = state.players.filter(x => x.id !== p.id);
+        state.payments = state.payments.filter(x => x.playerId !== p.id);
+        saveState();
+        renderPlayersPage();
+        renderHome();
+      }
+    });
+    list.appendChild(node);
+  });
+  populateCategoryFilter(qs('#filterCategory'));
+}
+
+function renderCoaches() {
+  let list = qs('#coachesList');
+  list.innerHTML = '';
+  if (!state.coaches?.length) {
+    list.innerHTML = '<div class="muted">هیچ مربی ثبت نشده.</div>';
+    return;
+  }
+  state.coaches.forEach(c => {
+    let node = document.createElement('div');
+    node.className = 'player-row';
+    let imgHtml = c.photo ? `<img src="${c.photo}">` : `<svg width="36" height="36" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e2e8f0"/></svg>`;
+    node.innerHTML = `
+      <div class="player-thumb">${imgHtml}</div>
+      <div class="meta"><strong>${escapeHtml(c.name)}</strong><small>${c.title || ''} • ${c.phone || ''}</small></div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn small" data-act="edit" data-id="${c.id}">ویرایش</button>
+        <button class="btn small" data-act="del" data-id="${c.id}" style="background: transparent;">حذف</button>
+      </div>
+    `;
+    node.querySelector('[data-act="edit"]').addEventListener('click', () => openCoachModal(c));
+    node.querySelector('[data-act="del"]').addEventListener('click', () => {
+      if (confirm('حذف مربی؟')) {
+        state.coaches = state.coaches.filter(x => x.id !== c.id);
+        saveState();
+        renderCoaches();
+        renderHome();
+      }
+    });
+    list.appendChild(node);
+  });
+}
+
+function fillMonthYear(monthId, yearId, selectedMonth, selectedYear) {
+  let months = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+  let payM = qs('#' + monthId);
+  payM.innerHTML = '<option value="">ماه</option>';
+  months.forEach((m, i) => {
+    let o = document.createElement('option');
+    o.value = i + 1;
+    o.textContent = m;
+    if (i + 1 == selectedMonth) o.selected = true;
+    payM.appendChild(o);
+  });
+  let payY = qs('#' + yearId);
+  payY.innerHTML = '<option value="">سال</option>';
+  let now = new Date();
+  let j = gregorian_to_jalali(now.getFullYear(), now.getMonth() + 1, now.getDate());
+  let thisYear = j[0];
+  for (let y = 1403; y <= thisYear + 5; y++) {
+    let o = document.createElement('option');
+    o.value = y;
+    o.textContent = y;
+    if (y == selectedYear) o.selected = true;
+    payY.appendChild(o);
+  }
+}
+
+function populateCategoryAndCoach() {
+  populateCategoryFilter(qs('#sessionCategory'));
+  populateCoachSelect(qs('#sessionCoach'));
+}
+
+function renderSessionsPage() {
+  populateCategoryAndCoach();
+  let container = qs('#sessionsList');
+  container.innerHTML = '';
+  if (!state.sessions?.length) {
+    container.innerHTML = '<div class="muted">هیچ جلسه‌ای ثبت نشده.</div>';
+    return;
+  }
+  state.sessions.slice().sort((a, b) => new Date(b.date) - new Date(a.date)).forEach(s => {
+    let cat = s.category || 'همه رده‌ها';
+    let coach = state.coaches.find(c => c.id === s.coachId)?.name || 'بدون مربی';
+    let node = document.createElement('div');
+    node.className = 'player-row';
+    node.innerHTML = `
+      <div class="meta">
+        <strong>${escapeHtml(s.title || 'جلسه')}</strong>
+        <small>تاریخ: ${isoToJalali(s.date)} • رده: ${cat} • مربی: ${coach}</small>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn small" data-id="${s.id}" data-act="view">حضورغیاب</button>
+        <button class="btn small" data-id="${s.id}" data-act="del" style="background: transparent;">حذف</button>
+      </div>
+    `;
+    node.querySelector('[data-act="view"]').addEventListener('click', () => openSessionAttendance(s.id));
+    node.querySelector('[data-act="del"]').addEventListener('click', () => {
+      if (confirm('حذف جلسه؟')) {
+        state.sessions = state.sessions.filter(x => x.id !== s.id);
+        saveState();
+        renderSessionsPage();
+        renderHome();
+      }
+    });
+    container.appendChild(node);
+  });
+}
+
+function populatePaymentPlayerSelect(searchQuery = '') {
+  let sel = qs('#paymentPlayer');
+  sel.innerHTML = '<option value="">انتخاب بازیکن</option>';
+  let filteredPlayers = state.players;
+  if (searchQuery) {
+    filteredPlayers = state.players.filter(p => normPersian(p.name).includes(normPersian(searchQuery)));
+  }
+  filteredPlayers.forEach(p => {
+    let o = document.createElement('option');
+    o.value = p.id;
+    o.textContent = p.name;
+    sel.appendChild(o);
+  });
+  if (filteredPlayers.length === 1) {
+    sel.value = filteredPlayers[0].id;
+  }
+}
+
+function renderPaymentsPage() {
+  populatePaymentPlayerSelect();
+  fillMonthYear('paymentMonth', 'paymentYear');
+  let list = qs('#paymentList');
+  list.innerHTML = '';
+  if (!state.payments?.length) {
+    list.innerHTML = '<div class="muted">هیچ پرداختی ثبت نشده.</div>';
+    return;
+  }
+  state.payments.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).forEach(pay => {
+    let pl = state.players.find(x => x.id === pay.playerId);
+    let period = pay.paymentMonth && pay.paymentYear ? `${pay.paymentMonth}/${pay.paymentYear}` : '—';
+    let item = document.createElement('div');
+    item.className = 'player-row';
+    item.innerHTML = `
+      <div class="meta">
+        <strong>${pl ? escapeHtml(pl.name) : '—'}</strong>
+        <small>${isoToJalali(pay.date)} • ${pay.type || '—'} • دوره: ${period}</small>
+      </div>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <div style="font-weight: 700;">${Number(pay.amount).toLocaleString()} تومان</div>
+        <button class="btn small" data-act="edit" data-id="${pay.id}">ویرایش</button>
+        <button class="btn small danger" data-act="del" data-id="${pay.id}">حذف</button>
+      </div>
+    `;
+    item.querySelector('[data-act="edit"]').addEventListener('click', () => editPayment(pay));
+    item.querySelector('[data-act="del"]').addEventListener('click', () => {
+      if (confirm('حذف پرداخت؟')) {
+        state.payments = state.payments.filter(x => x.id !== pay.id);
+        saveState();
+        renderPaymentsPage();
+        renderHome();
+      }
+    });
+    list.appendChild(item);
+  });
+  qs('#paymentPlayerSearch').addEventListener('input', (e) => populatePaymentPlayerSelect(e.target.value));
+}
+
+function editPayment(pay) {
+  let player = state.players.find(x => x.id === pay.playerId);
+  let html = `
+    <h3>ویرایش پرداخت برای ${escapeHtml(player.name)}</h3>
+    <div style="display: grid; gap: 12px; margin-top: 12px;">
+      <label for="modal_paymentDate">تاریخ پرداخت</label>
+      <input id="modal_paymentDate" class="input jalali-input" placeholder="YYYY/MM/DD" value="${isoToJalali(pay.date)}" />
+      <label>دوره پرداخت</label>
+      <div style="display: flex; gap: 8px;">
+        <select id="modal_paymentMonth" class="input"><option value="">ماه</option></select>
+        <select id="modal_paymentYear" class="input"><option value="">سال</option></select>
+      </div>
+      <label for="modal_paymentAmount">مبلغ (تومان)</label>
+      <input id="modal_paymentAmount" class="input" placeholder="مثال: 500000" type="number" value="${pay.amount}" />
+      <label for="modal_paymentType">نوع پرداخت</label>
+      <select id="modal_paymentType" class="input"><option value="">نوع پرداخت</option><option>نقد</option><option>رسید</option><option>کارت به کارت</option></select>
+      <div class="form-actions">
+        <button id="saveEditPaymentBtn" class="btn primary">ذخیره</button>
+        <button id="cancelEditPaymentBtn" class="btn">انصراف</button>
+      </div>
+    </div>
+  `;
+  showModal(html);
+  fillMonthYear('modal_paymentMonth', 'modal_paymentYear', pay.paymentMonth, pay.paymentYear);
+  qs('#modal_paymentType').value = pay.type || '';
+  qs('#cancelEditPaymentBtn').addEventListener('click', hideModal);
+  qs('#saveEditPaymentBtn').addEventListener('click', () => {
+    let dateStr = qs('#modal_paymentDate').value || todayJalali();
+    let amount = qs('#modal_paymentAmount').value;
+    let type = qs('#modal_paymentType').value || '';
+    let pMonth = qs('#modal_paymentMonth').value;
+    let pYear = qs('#modal_paymentYear').value;
+    if (!amount || amount <= 0) return alert('مبلغ معتبر وارد کنید');
+    let idx = state.payments.findIndex(x => x.id === pay.id);
+    if (idx > -1) {
+      state.payments[idx] = {
+        ...state.payments[idx],
+        amount: Number(amount),
+        date: jalaliToISO(dateStr),
+        type: type,
+        paymentMonth: pMonth ? Number(pMonth) : null,
+        paymentYear: pYear ? Number(pYear) : null,
+        updatedAt: new Date().toISOString()
+      };
+      saveState();
+      renderPaymentsPage();
+      renderHome();
+      hideModal();
+    }
+  });
+}
+
+function renderInsurancePage() {
+  let list = qs('#insuranceList');
+  list.innerHTML = '';
+  if (!state.players.length) {
+    list.innerHTML = '<div class="muted">هیچ بازیکنی ثبت نشده.</div>';
+    return;
+  }
+  state.players.forEach(p => {
+    let node = document.createElement('div');
+    node.className = 'player-row';
+    let imgHtml = p.photo ? `<img src="${p.photo}">` : `<svg width="36" height="36" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e2e8f0"/></svg>`;
+    let expired = isInsuranceExpired(p.insuranceDate);
+    let status = p.insuranceDate ? (expired ? 'منقضی' : 'فعال') : 'ثبت نشده';
+    let badgeClass = expired ? 'danger' : (p.insuranceDate ? '' : 'warning');
+    node.innerHTML = `
+      <div class="player-thumb">${imgHtml}</div>
+      <div class="meta"><strong>${escapeHtml(p.name)}</strong><small>${p.category || '—'} • ${p.insuranceDate || '—'}</small></div>
+      <div class="badge ${badgeClass}">${status}</div>
+    `;
+    node.addEventListener('click', () => openPlayerModal(p));
+    list.appendChild(node);
+  });
+}
+
+function addPayment(dateStr, amount, type, pMonth, pYear, playerId) {
+  if (!playerId) return alert('بازیکن انتخاب نشده');
+  if (!amount || amount <= 0) return alert('مبلغ معتبر وارد کنید');
+  let pay = {
+    id: uid('pay'),
+    playerId: playerId,
+    amount: Number(amount),
+    date: jalaliToISO(dateStr),
+    type: type,
+    paymentMonth: pMonth ? Number(pMonth) : null,
+    paymentYear: pYear ? Number(pYear) : null,
+    createdAt: new Date().toISOString()
+  };
+  state.payments.unshift(pay);
+  saveState();
+  renderPaymentsPage();
+  renderHome();
+}
+
+function openPaymentModal(playerId) {
+  let p = state.players.find(x => x.id === playerId);
+  if (!p) return alert('بازیکن پیدا نشد');
+  let html = `
+    <h3>ثبت پرداخت برای ${escapeHtml(p.name)}</h3>
+    <div style="display: grid; gap: 12px; margin-top: 12px;">
+      <label for="modal_paymentDate">تاریخ پرداخت</label>
+      <input id="modal_paymentDate" class="input jalali-input" placeholder="YYYY/MM/DD" value="${todayJalali()}" />
+      <label>دوره پرداخت</label>
+      <div style="display: flex; gap: 8px;">
+        <select id="modal_paymentMonth" class="input"><option value="">ماه</option></select>
+        <select id="modal_paymentYear" class="input"><option value="">سال</option></select>
+      </div>
+      <label for="modal_paymentAmount">مبلغ (تومان)</label>
+      <input id="modal_paymentAmount" class="input" placeholder="مثال: 500000" type="number" />
+      <label for="modal_paymentType">نوع پرداخت</label>
+      <select id="modal_paymentType" class="input"><option value="">نوع پرداخت</option><option>نقد</option><option>رسید</option><option>کارت به کارت</option></select>
+      <div class="form-actions">
+        <button id="savePaymentBtn" class="btn primary">ثبت</button>
+        <button id="cancelPaymentBtn" class="btn">انصراف</button>
+      </div>
+    </div>
+  `;
+  showModal(html);
+  fillMonthYear('modal_paymentMonth', 'modal_paymentYear');
+  qs('#cancelPaymentBtn').addEventListener('click', hideModal);
+  qs('#savePaymentBtn').addEventListener('click', () => {
+    let dateStr = qs('#modal_paymentDate').value || todayJalali();
+    let amount = qs('#modal_paymentAmount').value;
+    let type = qs('#modal_paymentType').value || '';
+    let pMonth = qs('#modal_paymentMonth').value;
+    let pYear = qs('#modal_paymentYear').value;
+    addPayment(dateStr, amount, type, pMonth, pYear, playerId);
+    hideModal();
+  });
+}
+
+function openDebtorsModal() {
+  let todayJ = todayJalali().split('/').map(Number);
+  let curMonth = todayJ[1];
+  let curYear = todayJ[0];
+  let currentSessions = state.sessions.filter(s => {
+    let jDate = isoToJalali(s.date).split('/').map(Number);
+    return jDate[0] === curYear && jDate[1] === curMonth;
+  });
+  let debtors = state.players.filter(p => {
+    let attended = currentSessions.filter(s => s.attendances?.[p.id]?.present).length >= 4;
+    let paid = state.payments.some(pay => pay.playerId === p.id && pay.paymentMonth === curMonth && pay.paymentYear === curYear);
+    return attended && !paid;
+  });
+  let html = `
+    <h3>بدهکاران آخرین دوره (${debtors.length})</h3>
+    <div style="max-height: 60vh; overflow: auto;">
+      ${debtors.map(p => `
+        <div class="player-row">
+          <div class="meta"><strong>${escapeHtml(p.name)}</strong><small>${p.category || ''}</small></div>
+          <button class="btn small primary" onclick="hideModal(); openPaymentModal('${p.id}')">پرداخت</button>
+        </div>
+      `).join('') || '<div class="muted">هیچ بدهکاری یافت نشد.</div>'}
+    </div>
+    <div class="form-actions">
+      <button id="closeDebtors" class="btn">بستن</button>
+    </div>
+  `;
+  showModal(html);
+  qs('#closeDebtors').addEventListener('click', hideModal);
+}
+
+function openPaymentReportModal() {
+  let html = `
+    <h3>گزارش پرداخت</h3>
+    <div style="display: grid; gap: 12px; margin-top: 12px;">
+      <label for="reportCategory">رده مورد نظر</label>
+      <select id="reportCategory" class="input"><option value="">همه رده‌ها</option></select>
+      <label>دوره پرداخت</label>
+      <div style="display: flex; gap: 8px;">
+        <select id="reportMonth" class="input"><option value="">ماه</option></select>
+        <select id="reportYear" class="input"><option value="">سال</option></select>
+      </div>
+      <div class="form-actions">
+        <button id="generateReportBtn" class="btn primary">نمایش گزارش</button>
+        <button id="cancelReportBtn" class="btn">انصراف</button>
+      </div>
+    </div>
+  `;
+  showModal(html);
+  populateCategoryFilter(qs('#reportCategory'));
+  fillMonthYear('reportMonth', 'reportYear');
+  qs('#cancelReportBtn').addEventListener('click', hideModal);
+  qs('#generateReportBtn').addEventListener('click', () => {
+    let category = qs('#reportCategory').value;
+    let month = qs('#reportMonth').value ? Number(qs('#reportMonth').value) : null;
+    let year = qs('#reportYear').value ? Number(qs('#reportYear').value) : null;
+    if (!month || !year) return alert('دوره پرداخت را انتخاب کنید');
+    hideModal();
+    generatePaymentReport(category, month, year);
+  });
+}
+
+function generatePaymentReport(category, month, year) {
+  let filteredPlayers = state.players.filter(p => !category || p.category === category);
+  let reportList = filteredPlayers.map(p => {
+    let payment = state.payments.find(pay => pay.playerId === p.id && pay.paymentMonth === month && pay.paymentYear === year);
+    return {
+      player: p,
+      status: payment ? `پرداخت شده (${Number(payment.amount).toLocaleString()} تومان)` : 'پرداخت نشده',
+      badgeClass: payment ? '' : 'danger'
+    };
+  });
+  let html = `
+    <h3>گزارش پرداخت برای دوره ${month}/${year} (${category || 'همه رده‌ها'})</h3>
+    <div style="max-height: 60vh; overflow: auto; margin-top: 12px;" id="reportContent">
+      ${reportList.map(item => `
+        <div class="player-row">
+          <div class="player-thumb">${item.player.photo ? `<img src="${item.player.photo}">` : '<svg width="36" height="36" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e2e8f0"/></svg>'}</div>
+          <div class="meta"><strong>${escapeHtml(item.player.name)}</strong><small>${item.player.category || '—'}</small></div>
+          <div class="badge ${item.badgeClass}">${item.status}</div>
+        </div>
+      `).join('') || '<div class="muted">هیچ بازیکنی یافت نشد.</div>'}
+    </div>
+    <div class="form-actions">
+      <button id="savePdfReport" class="btn primary">ذخیره PDF</button>
+      <button id="shareReport" class="btn">اشتراک‌گذاری</button>
+      <button id="closeReport" class="btn">بستن</button>
+    </div>
+  `;
+  showModal(html);
+  qs('#closeReport').addEventListener('click', hideModal);
+  qs('#savePdfReport').addEventListener('click', () => {
+    let printable = document.createElement('div');
+    printable.innerHTML = html.replace(/class="form-actions".*/g, '').replace(/<h3>/g, '<h3 style="text-align: center;">');
+    printable.classList.add('modal');
+    printable.querySelectorAll('.btn, button').forEach(el => el.classList.add('no-print'));
+    document.body.appendChild(printable);
+    window.print();
+    document.body.removeChild(printable);
+  });
+  qs('#shareReport').addEventListener('click', () => {
+    let text = `گزارش پرداخت برای دوره ${month}/${year} (${category || 'همه رده‌ها'})\n\n`;
+    reportList.forEach(item => {
+      text += `${item.player.name} (${item.player.category || '—'}): ${item.status}\n`;
+    });
+    if (navigator.share) {
+      navigator.share({ title: 'گزارش پرداخت', text });
+    } else {
+      navigator.clipboard.writeText(text).then(() => alert('گزارش در کلیپ‌بورد کپی شد'));
+    }
+  });
+}
+
+/* Modal & Forms */
+const modal = qs('#modalBackdrop');
+function showModal(html) {
+  qs('#modalContent').innerHTML = html;
+  modal.style.display = 'flex';
+  modal.setAttribute('aria-hidden', 'false');
+  attachJalaliInputs(); // Re-attach jalali inputs for dynamically added inputs
+}
+function hideModal() {
+  modal.style.display = 'none';
+  modal.setAttribute('aria-hidden', 'true');
+  qs('#modalContent').innerHTML = '';
+}
+
+function openPlayerModal(player) {
+  let isEdit = !!player;
+  let scores = player?.scores || {};
+  let today = todayJalali();
+  let html = `
+    <h3>${isEdit ? 'ویرایش بازیکن' : 'ثبت بازیکن جدید'}</h3>
+    <div style="display: flex; gap: 12px; align-items: flex-start; margin-top: 12px;">
+      <div style="width: 120px; height: 120px; border-radius: 12px; overflow: hidden; background: #e2e8f0; display: flex; align-items: center; justify-content: center;">
+        ${player?.photo ? `<img id="previewPhoto" src="${player.photo}" style="width: 100%; height: 100%; object-fit: cover;">` : `<div id="previewPhoto" class="muted">عکس</div>`}
+      </div>
+      <div style="flex: 1;">
+        <div class="form-row">
+          <div>
+            <label for="p_name">نام کامل</label>
+            <input id="p_name" type="text" value="${player ? escapeHtml(player.name) : ''}">
+          </div>
+          <div>
+            <label for="p_birth">تاریخ تولد (YYYY/MM/DD)</label>
+            <input id="p_birth" class="jalali-input input" value="${player ? escapeHtml(player.birthdate) : ''}">
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label for="p_join">تاریخ عضویت (YYYY/MM/DD)</label>
+            <input id="p_join" class="jalali-input input" value="${player ? escapeHtml(player.joinDate) : today}">
+          </div>
+          <div>
+            <label for="p_insurance">تاریخ ثبت بیمه ورزشی (YYYY/MM/DD)</label>
+            <input id="p_insurance" class="jalali-input input" value="${player ? escapeHtml(player.insuranceDate || '') : ''}">
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label for="p_category">رده‌بندی</label>
+            <select id="p_category"><option value="">رده‌بندی</option><option>نوآموز</option><option>مینی والیبال</option><option>آینده‌سازان</option><option>نوجوانان</option><option>جوانان</option><option>امید</option><option>بزرگسال</option></select>
+          </div>
+          <div>
+            <label for="p_position">پست مورد علاقه</label>
+            <input id="p_position" type="text" value="${player ? escapeHtml(player.favoritePosition || '') : ''}">
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label for="p_phone">شماره تماس</label>
+            <input id="p_phone" type="text" value="${player ? escapeHtml(player.phone || '') : ''}">
+          </div>
+          <div>
+            <label for="p_father">نام پدر</label>
+            <input id="p_father" type="text" value="${player ? escapeHtml(player.fatherName || '') : ''}">
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label for="p_height">قد (cm)</label>
+            <input id="p_height" type="number" value="${player ? escapeHtml(player.height || '') : ''}">
+          </div>
+          <div>
+            <label for="p_weight">وزن (kg)</label>
+            <input id="p_weight" type="number" value="${player ? escapeHtml(player.weight || '') : ''}">
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <strong>امتیازات (0-10):</strong>
+          <div id="scoresContainer"></div>
+        </div>
+        <div style="margin-top: 12px; display: flex; gap: 8px;">
+          <label class="btn">انتخاب عکس<input id="p_photo" type="file" accept="image/*" style="display: none;"></label>
+          <button id="removePhotoBtn" class="btn" ${player?.photo ? '' : 'disabled'}>حذف عکس</button>
+        </div>
+        <div class="form-actions">
+          <button id="savePlayerBtn" class="btn primary">${isEdit ? 'ذخیره' : 'ثبت'}</button>
+          <button id="cancelPlayerBtn" class="btn">انصراف</button>
+        </div>
+      </div>
+    </div>
+  `;
+  showModal(html);
+  if (player?.category) qs('#p_category').value = player.category;
+  
+  renderScoreFields(player?.category || '');
+  
+  if (player?.scores) {
+    for (let key in player.scores) {
+      let input = qs(`#score_${key}`);
+      if (input) input.value = player.scores[key];
+    }
+  }
+  
+  qs('#p_category').addEventListener('change', (e) => {
+    renderScoreFields(e.target.value);
+  });
+
+  qs('#p_photo').addEventListener('change', e => {
+    let f = e.target.files[0];
+    if (!f) return;
+    imageFileToDataURL(f, 500).then(data => {
+      let prev = qs('#previewPhoto');
+      if (prev.tagName === 'IMG') {
+        prev.src = data;
+      } else {
+        prev.innerHTML = '';
+        let img = document.createElement('img');
+        img.src = data;
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'cover';
+        prev.appendChild(img);
+      }
+      qs('#removePhotoBtn').disabled = false;
+      qs('#p_photo').dataset.dataurl = data;
+    }).catch(err => alert('خطا در خواندن تصویر'));
+  });
+
+  qs('#removePhotoBtn').addEventListener('click', () => {
+    qs('#previewPhoto').innerHTML = '<div class="muted">عکس</div>';
+    qs('#p_photo').value = '';
+    qs('#p_photo').dataset.dataurl = '';
+    qs('#removePhotoBtn').disabled = true;
+  });
+
+  qs('#cancelPlayerBtn').addEventListener('click', hideModal);
+  qs('#savePlayerBtn').addEventListener('click', () => {
+    let name = qs('#p_name').value.trim();
+    if (!name) return alert('نام را وارد کنید');
+    let birth = qs('#p_birth').value.trim();
+    let join = qs('#p_join').value.trim() || todayJalali();
+    let insurance = qs('#p_insurance').value.trim();
+    let category = qs('#p_category').value;
+    let pos = qs('#p_position').value;
+    let phone = qs('#p_phone').value;
+    let father = qs('#p_father').value;
+    let height = qs('#p_height').value;
+    let weight = qs('#p_weight').value;
+    
+    let scores = {};
+    qsa('#scoresContainer input[type="number"]').forEach(input => {
+      let key = input.id.replace('score_', '');
+      scores[key] = input.value || 0;
+    });
+    
+    let photoData = qs('#p_photo').dataset.dataurl || (player ? player.photo || '' : '');
+
+    if (isEdit) {
+      let idx = state.players.findIndex(x => x.id === player.id);
+      if (idx > -1) {
+        state.players[idx] = {
+          ...state.players[idx],
+          name, birthdate: birth, joinDate: join, insuranceDate: insurance, category, favoritePosition: pos,
+          phone, fatherName: father, height, weight, scores, photo: photoData, updatedAt: new Date().toISOString()
+        };
+      }
+    } else {
+      state.players.push({
+        id: uid('p'), name, birthdate: birth, joinDate: join, insuranceDate: insurance, category, favoritePosition: pos,
+        phone, fatherName: father, height, weight, scores, photo: photoData, createdAt: new Date().toISOString()
+      });
+    }
+    saveState();
+    hideModal();
+    renderPlayersPage();
+    renderHome();
+  });
+}
+
+function openPlayerProfile(id) {
+  let p = state.players.find(x => x.id === id);
+  if (!p) return alert('پروفایل پیدا نشد');
+  let sessions = state.sessions.filter(s => s.attendances?.[p.id]?.present).map(s => ({
+    title: s.title || 'جلسه',
+    date: isoToJalali(s.date),
+    category: s.category
+  }));
+  let payments = state.payments.filter(x => x.playerId === p.id).map(pay => ({
+    amount: Number(pay.amount).toLocaleString(),
+    date: isoToJalali(pay.date),
+    period: pay.paymentMonth && pay.paymentYear ? `${pay.paymentMonth}/${pay.paymentYear}` : '—',
+    type: pay.type || '—'
+  }));
+  let scores = p.scores || {};
+  let avgScore = calcAverageScore(p);
+  let expired = isInsuranceExpired(p.insuranceDate);
+  let insuranceStatus = p.insuranceDate ? (expired ? 'منقضی' : 'فعال') + ` (${p.insuranceDate})` : 'بیمه‌ای ثبت نشده';
+  let html = `
+    <div style="text-align: center;">
+      <div style="width: 160px; height: 160px; border-radius: 12px; overflow: hidden; background: #e2e8f0; margin: 0 auto;">
+        ${p.photo ? `<img src="${p.photo}" style="width: 100%; height: 100%; object-fit: cover;">` : '<div class="muted">بدون عکس</div>'}
+      </div>
+      <h3 style="margin-top: 12px;">${escapeHtml(p.name)}</h3>
+      <div class="muted">رده: ${p.category || '—'}</div>
+      <div class="badge ${expired ? 'danger' : !p.insuranceDate ? 'warning' : ''}" style="margin: 8px auto; width: fit-content;">
+        بیمه: ${insuranceStatus}
+      </div>
+      <div style="margin-top: 12px; display: grid; gap: 8px; text-align: right;">
+        <div><strong>پست:</strong> ${p.favoritePosition || '—'}</div>
+        <div><strong>تلفن:</strong> ${p.phone || '—'}</div>
+        <div><strong>نام پدر:</strong> ${p.fatherName || '—'}</div>
+        <div><strong>تاریخ تولد:</strong> ${p.birthdate || '—'}</div>
+        <div><strong>سن:</strong> ${calcAge(p.birthdate) || '—'}</div>
+        <div><strong>قد/وزن:</strong> ${p.height || '—'}cm / ${p.weight || '—'}kg</div>
+        <div><strong>تاریخ عضویت:</strong> ${p.joinDate || '—'}</div>
+        <div><strong>امتیاز کلی:</strong> <span class="badge">${avgScore}</span></div>
+        <div><strong>امتیازات:</strong>
+          <div class="score-list">
+            ${Object.keys(scores).map(key => `<div>${key}: ${scores[key] || 0}</div>`).join('')}
+          </div>
+        </div>
+        <div><strong>جلسات شرکت‌کرده (${sessions.length}):</strong>
+          ${sessions.length ? `
+            <div style="margin-top: 8px; max-height: 200px; overflow: auto;">
+              ${sessions.slice(0, 5).map(s => `<div>${s.title} - ${s.date} (${s.category || '—'})</div>`).join('')}
+              ${sessions.length > 5 ? `<a href="#" onclick="showAllSessions('${p.id}')" class="view-more">مشاهده همه جلسات (${sessions.length})</a>` : ''}
+            </div>
+          ` : '<div class="muted">هیچ جلسه‌ای</div>'}
+        </div>
+        <div><strong>پرداخت‌ها (${payments.length}):</strong>
+          ${payments.length ? `
+            <div style="margin-top: 8px; max-height: 200px; overflow: auto;">
+              ${payments.slice(0, 5).map(p => `<div>${p.amount} تومان - ${p.date} - دوره: ${p.period} (${p.type})</div>`).join('')}
+              ${payments.length > 5 ? `<a href="#" onclick="showAllPayments('${p.id}')" class="view-more">مشاهده همه پرداخت‌ها (${payments.length})</a>` : ''}
+            </div>
+          ` : '<div class="muted">هیچ پرداختی</div>'}
+        </div>
+      </div>
+      <div class="form-actions">
+        <button id="editFromProfile" class="btn">ویرایش</button>
+        <button id="addPaymentFromProfile" class="btn primary">ثبت پرداخت</button>
+        <button id="shareProfile" class="btn">اشتراک‌گذاری</button>
+        <button id="closeProfile" class="btn">بستن</button>
+      </div>
+    </div>
+  `;
+  showModal(html);
+  qs('#closeProfile').addEventListener('click', hideModal);
+  qs('#editFromProfile').addEventListener('click', () => { hideModal(); openPlayerModal(p); });
+  qs('#addPaymentFromProfile').addEventListener('click', () => { hideModal(); openPaymentModal(p.id); });
+  qs('#shareProfile').addEventListener('click', () => {
+    let text = `پروفایل ${p.name}\nرده: ${p.category || '—'}\nبیمه: ${insuranceStatus}\nپست: ${p.favoritePosition || '—'}\nتلفن: ${p.phone || '—'}\nنام پدر: ${p.fatherName || '—'}\nتاریخ تولد: ${p.birthdate || '—'}\nسن: ${calcAge(p.birthdate) || '—'}\nقد/وزن: ${p.height || '—'}cm / ${p.weight || '—'}kg\nتاریخ عضویت: ${p.joinDate || '—'}\nامتیاز کلی: ${avgScore}\nامتیازات: ${Object.keys(scores).map(key => `${key}: ${scores[key]}`).join(', ')}\nجلسات: ${sessions.length}\nپرداخت‌ها: ${payments.length}`;
+    if (navigator.share) {
+      navigator.share({ title: 'پروفایل بازیکن', text });
+    } else {
+      navigator.clipboard.writeText(text).then(() => alert('پروفایل در کلیپ‌بورد کپی شد'));
+    }
+  });
+}
+
+function showAllSessions(playerId) {
+  let p = state.players.find(x => x.id === playerId);
+  if (!p) return;
+  let sessions = state.sessions.filter(s => s.attendances?.[p.id]?.present).map(s => ({
+    title: s.title || 'جلسه',
+    date: isoToJalali(s.date),
+    category: s.category
+  }));
+  
+  let html = `
+    <h3>همه جلسات ${escapeHtml(p.name)}</h3>
+    <div style="max-height: 60vh; overflow: auto; margin-top: 12px;">
+      ${sessions.map(s => `
+        <div style="padding: 8px; border-bottom: 1px solid rgba(0,0,0,0.1);">
+          <div><strong>${s.title}</strong></div>
+          <div class="muted">${s.date} • ${s.category || '—'}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="form-actions">
+      <button id="closeAllSessions" class="btn">بستن</button>
+    </div>
+  `;
+  showModal(html);
+  qs('#closeAllSessions').addEventListener('click', hideModal);
+}
+
+function showAllPayments(playerId) {
+  let p = state.players.find(x => x.id === playerId);
+  if (!p) return;
+  let payments = state.payments.filter(x => x.playerId === p.id).map(pay => ({
+    amount: Number(pay.amount).toLocaleString(),
+    date: isoToJalali(pay.date),
+    period: pay.paymentMonth && pay.paymentYear ? `${pay.paymentMonth}/${pay.paymentYear}` : '—',
+    type: pay.type || '—'
+  }));
+  
+  let html = `
+    <h3>همه پرداخت‌های ${escapeHtml(p.name)}</h3>
+    <div style="max-height: 60vh; overflow: auto; margin-top: 12px;">
+      ${payments.map(p => `
+        <div style="padding: 8px; border-bottom: 1px solid rgba(0,0,0,0.1);">
+          <div><strong>${p.amount} تومان</strong></div>
+          <div class="muted">${p.date} • دوره: ${p.period} • ${p.type}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="form-actions">
+      <button id="closeAllPayments" class="btn">بستن</button>
+    </div>
+  `;
+  showModal(html);
+  qs('#closeAllPayments').addEventListener('click', hideModal);
+}
+
+function openCoachModal(coach) {
+  let isEdit = !!coach;
+  let html = `
+    <h3>${isEdit ? 'ویرایش مربی' : 'افزودن مربی'}</h3>
+    <div style="display: flex; gap: 12px; align-items: flex-start; margin-top: 12px;">
+      <div style="width: 120px; height: 120px; border-radius: 12px; overflow: hidden; background: #e2e8f0;" id="coachPreview">
+        ${coach?.photo ? `<img src="${coach.photo}" style="width: 100%; height: 100%; object-fit: cover;">` : 'عکس'}
+      </div>
+      <div style="flex: 1;">
+        <div class="form-row">
+          <div>
+            <label for="c_name">نام کامل</label>
+            <input id="c_name" type="text" value="${coach ? escapeHtml(coach.name) : ''}">
+          </div>
+          <div>
+            <label for="c_title">سمت/عنوان</label>
+            <input id="c_title" type="text" value="${coach ? escapeHtml(coach.title || '') : ''}">
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label for="c_phone">تلفن</label>
+            <input id="c_phone" type="text" value="${coach ? escapeHtml(coach.phone || '') : ''}">
+          </div>
+          <div style="display: flex; gap: 8px; align-items: flex-end;">
+            <label class="btn">عکس<input id="c_photo" type="file" accept="image/*" style="display: none;"></label>
+            <button id="removeCoachPhoto" class="btn" ${coach?.photo ? '' : 'disabled'}>حذف</button>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button id="saveCoach" class="btn primary">${isEdit ? 'ذخیره' : 'افزودن'}</button>
+          <button id="cancelCoach" class="btn">انصراف</button>
+        </div>
+      </div>
+    </div>
+  `;
+  showModal(html);
+
+  qs('#cancelCoach').addEventListener('click', hideModal);
+  qs('#c_photo').addEventListener('change', e => {
+    let f = e.target.files[0];
+    if (!f) return;
+    imageFileToDataURL(f, 500).then(data => {
+      qs('#coachPreview').innerHTML = `<img src="${data}" style="width: 100%; height: 100%; object-fit: cover;">`;
+      qs('#c_photo').dataset.dataurl = data;
+      qs('#removeCoachPhoto').disabled = false;
+    }).catch(err => alert('خطا در خواندن عکس'));
+  });
+  qs('#removeCoachPhoto').addEventListener('click', () => {
+    qs('#coachPreview').innerHTML = 'عکس';
+    qs('#c_photo').dataset.dataurl = '';
+    qs('#removeCoachPhoto').disabled = true;
+  });
+
+  qs('#saveCoach').addEventListener('click', () => {
+    let name = qs('#c_name').value.trim();
+    if (!name) return alert('نام را وارد کنید');
+    let title = qs('#c_title').value.trim();
+    let phone = qs('#c_phone').value.trim();
+    let photo = qs('#c_photo').dataset.dataurl || (coach ? coach.photo || '' : '');
+    if (isEdit) {
+      let idx = state.coaches.findIndex(x => x.id === coach.id);
+      if (idx > -1) state.coaches[idx] = { ...state.coaches[idx], name, title, phone, photo, updatedAt: new Date().toISOString() };
+    } else {
+      state.coaches.push({ id: uid('c'), name, title, phone, photo, createdAt: new Date().toISOString() });
+    }
+    saveState();
+    hideModal();
+    renderCoaches();
+    renderHome();
+  });
+}
+
+function createSession() {
+  let title = qs('#sessionTitle').value.trim();
+  let dateStr = qs('#sessionDate').value || todayJalali();
+  let category = qs('#sessionCategory').value || null;
+  let coachId = qs('#sessionCoach').value || null;
+  let id = uid('s');
+  let s = { id, title, date: jalaliToISO(dateStr), category, coachId, createdAt: new Date().toISOString(), attendances: {} };
+  state.sessions.unshift(s);
+  saveState();
+  qs('#sessionTitle').value = '';
+  qs('#sessionDate').value = '';
+  renderSessionsPage();
+  renderHome();
+}
+
+function openSessionAttendance(id) {
+  let s = state.sessions.find(x => x.id === id);
+  if (!s) return;
+  let html = `
+    <h3>حضور/غیاب — ${escapeHtml(s.title)}</h3>
+    <div style="max-height: 60vh; overflow: auto; margin-top: 12px;">
+  `;
+  let filteredPlayers = state.players;
+  if (s.category) filteredPlayers = filteredPlayers.filter(p => p.category === s.category);
+  filteredPlayers.forEach(p => {
+    let att = s.attendances?.[p.id] || { present: false, reason: '' };
+    html += `
+      <div style="display: flex; align-items: center; gap: 12px; padding: 8px; border-bottom: 1px dashed rgba(0,0,0,0.06);">
+        <div class="meta"><strong>${escapeHtml(p.name)}</strong><small>${p.category || ''}</small></div>
+        <label style="display: flex; gap: 8px;"><input type="checkbox" data-player="${p.id}" ${att.present ? 'checked' : ''}> حاضر</label>
+        <input type="text" data-reason="${p.id}" placeholder="علت" value="${escapeHtml(att.reason || '')}" style="width: 160px;">
+      </div>
+    `;
+  });
+  html += `
+    </div>
+    <div class="form-actions">
+      <button id="saveAttendance" class="btn primary">ذخیره</button>
+      <button id="closeAttendance" class="btn">بستن</button>
+    </div>
+  `;
+  showModal(html);
+  qs('#closeAttendance').addEventListener('click', hideModal);
+  qs('#saveAttendance').addEventListener('click', () => {
+    filteredPlayers.forEach(p => {
+      let cb = qs(`[data-player="${p.id}"]`);
+      let reason = qs(`[data-reason="${p.id}"]`);
+      if (cb) {
+        s.attendances = s.attendances || {};
+        s.attendances[p.id] = { present: !!cb.checked, reason: reason ? reason.value : '' };
+      }
+    });
+    saveState();
+    hideModal();
+    renderSessionsPage();
+    renderHome();
+  });
+}
+
+/* Jalali Datepicker */
+const calendar = qs('#jalaliCalendar');
+let activeInput = null;
+
+function showJalaliCalendar(inputEl) {
+  activeInput = inputEl;
+  let rect = inputEl.getBoundingClientRect();
+  calendar.innerHTML = '';
+  calendar.classList.remove('hide');
+  calendar.setAttribute('aria-hidden', 'false');
+  let top = rect.bottom + window.scrollY + 8;
+  let left = rect.left + window.scrollX;
+  calendar.style.top = top + 'px';
+  calendar.style.left = left + 'px';
+  let cur = inputEl.value && inputEl.value.match(/^\d{4}\/\d{2}\/\d{2}$/) ? inputEl.value : todayJalali();
+  let parts = cur.split('/').map(Number);
+  renderCalendar(parts[0], parts[1], parts[2]);
+}
+
+function hideJalaliCalendar() {
+  calendar.classList.add('hide');
+  calendar.setAttribute('aria-hidden', 'true');
+  calendar.innerHTML = '';
+  activeInput = null;
+}
+
+function renderCalendar(year, month, selectedDay) {
+  calendar.innerHTML = '';
+  let header = document.createElement('div');
+  header.className = 'cal-header';
+  
+  // Year select
+  let yearSelect = document.createElement('select');
+  yearSelect.className = 'input';
+  yearSelect.style.width = '80px';
+  for (let y = 1370; y <= year + 10; y++) {  // Increased range for birthdate
+    let option = document.createElement('option');
+    option.value = y;
+    option.textContent = y;
+    if (y === year) option.selected = true;
+    yearSelect.appendChild(option);
+  }
+  
+  // Month select
+  let monthSelect = document.createElement('select');
+  monthSelect.className = 'input';
+  monthSelect.style.width = '100px';
+  let months = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+  months.forEach((m, i) => {
+    let option = document.createElement('option');
+    option.value = i + 1;
+    option.textContent = m;
+    if (i + 1 === month) option.selected = true;
+    monthSelect.appendChild(option);
+  });
+  
+  // Navigation buttons
+  let prevBtn = document.createElement('button');
+  prevBtn.className = 'btn small';
+  prevBtn.innerHTML = '&lt;';
+  let nextBtn = document.createElement('button');
+  nextBtn.className = 'btn small';
+  nextBtn.innerHTML = '&gt;';
+  
+  header.appendChild(yearSelect);
+  header.appendChild(monthSelect);
+  header.appendChild(prevBtn);
+  header.appendChild(nextBtn);
+  calendar.appendChild(header);
+
+  // Year change
+  yearSelect.addEventListener('change', () => {
+    renderCalendar(parseInt(yearSelect.value), month, selectedDay);
+  });
+  
+  // Month change
+  monthSelect.addEventListener('change', () => {
+    renderCalendar(year, parseInt(monthSelect.value), selectedDay);
+  });
+  
+  // Previous month
+  prevBtn.addEventListener('click', () => {
+    month--;
+    if (month < 1) { month = 12; year--; }
+    renderCalendar(year, month, selectedDay);
+  });
+  
+  // Next month
+  nextBtn.addEventListener('click', () => {
+    month++;
+    if (month > 12) { month = 1; year++; }
+    renderCalendar(year, month, selectedDay);
+  });
+
+  // Week days
+  let grid = document.createElement('div');
+  grid.className = 'cal-grid';
+  let weekTitles = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'];
+  weekTitles.forEach(w => {
+    let t = document.createElement('div');
+    t.style.textAlign = 'center';
+    t.style.fontSize = '13px';
+    t.style.color = 'var(--muted)';
+    t.textContent = w;
+    grid.appendChild(t);
+  });
+
+  // Calculate first day of month
+  let g = jalali_to_gregorian(year, month, 1);
+  let first = new Date(g[0], g[1] - 1, g[2]);
+  let startWeekDay = first.getDay();
+  let satIndex = 6;
+  let offset = (startWeekDay - satIndex + 7) % 7;
+  
+  // Days in month
+  let mdays = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29];
+  let daysInMonth = mdays[month - 1];
+  if (month === 12 && ((year % 4 === 3 && year % 100 !== 3) || (year % 400 === 3))) {
+    daysInMonth = 30; // Kabiseh year
+  }
+  
+  // Blank days
+  for (let i = 0; i < offset; i++) {
+    let blank = document.createElement('div');
+    grid.appendChild(blank);
+  }
+  
+  // Days
+  for (let d = 1; d <= daysInMonth; d++) {
+    let cell = document.createElement('div');
+    cell.className = 'cal-day';
+    if (d === selectedDay) {
+      cell.style.background = 'var(--accent)';
+      cell.style.color = '#fff';
+    }
+    cell.textContent = d;
+    cell.addEventListener('click', () => {
+      if (activeInput) {
+        activeInput.value = `${year}/${String(month).padStart(2, '0')}/${String(d).padStart(2, '0')}`;
+      }
+      hideJalaliCalendar();
+    });
+    grid.appendChild(cell);
+  }
+  calendar.appendChild(grid);
+}
+
+function attachJalaliInputs() {
+  qsa('.jalali-input').forEach(inp => {
+    inp.addEventListener('keydown', e => e.preventDefault());
+    inp.addEventListener('paste', e => e.preventDefault());
+    inp.addEventListener('input', e => { if (e.inputType !== 'insertFromPaste') inp.value = inp.value.slice(0, -1); });
+    inp.addEventListener('focus', () => showJalaliCalendar(inp));
+    inp.addEventListener('click', () => showJalaliCalendar(inp));
+  });
+  document.addEventListener('click', e => {
+    if (calendar.contains(e.target)) return;
+    let inputs = qsa('.jalali-input');
+    let isInp = inputs.some(i => i === e.target);
+    if (!isInp) hideJalaliCalendar();
+  });
+}
+
+/* Event Binding & Init */
+document.addEventListener('DOMContentLoaded', () => {
+  // Desktop menu
+  qs('#homeBtn').addEventListener('click', () => showView('home'));
+  qs('#playersBtn').addEventListener('click', () => showView('players'));
+  qs('#coachesBtn').addEventListener('click', () => showView('coaches'));
+  qs('#sessionsBtn').addEventListener('click', () => showView('sessions'));
+  qs('#paymentsBtn').addEventListener('click', () => showView('payments'));
+  qs('#insuranceBtn').addEventListener('click', () => showView('insurance'));
+
+  // Mobile menu
+  qs('#homeMenu').addEventListener('click', () => showView('home'));
+  qs('#playersMenu').addEventListener('click', () => showView('players'));
+  qs('#coachesMenu').addEventListener('click', () => showView('coaches'));
+  qs('#sessionsMenu').addEventListener('click', () => showView('sessions'));
+  qs('#paymentsMenu').addEventListener('click', () => showView('payments'));
+  qs('#insuranceMenu').addEventListener('click', () => showView('insurance'));
+
+  // Buttons
+  qs('#addPlayerBtn').addEventListener('click', () => openPlayerModal(null));
+  qs('#openAddPlayerFromList').addEventListener('click', () => openPlayerModal(null));
+  qs('#addCoachBtn').addEventListener('click', () => openCoachModal(null));
+  qs('#createSessionBtn').addEventListener('click', createSession);
+  qs('#addSessionFromHomeBtn').addEventListener('click', () => {
+    showView('sessions');
+    qs('#sessionDate').value = todayJalali();
+  });
+  qs('#quickSearch').addEventListener('input', e => {
+    showView('players');
+    qs('#playersSearch').value = e.target.value;
+    renderPlayersPage();
+  });
+  qs('#playersSearch').addEventListener('input', renderPlayersPage);
+  qs('#filterCategory').addEventListener('change', renderPlayersPage);
+  qs('#filterInsurance').addEventListener('change', renderPlayersPage);
+  qs('#sortPlayers').addEventListener('change', renderPlayersPage);
+  qs('#showAllPlayersBtn').addEventListener('click', () => showView('players'));
+  qs('#showAllSessionsBtn').addEventListener('click', () => showView('sessions'));
+  qs('#showAllPaymentsBtn').addEventListener('click', () => showView('payments'));
+  qs('#showAllInsurancesBtn').addEventListener('click', () => showView('insurance'));
+  qs('#addPaymentBtn').addEventListener('click', () => {
+    let dateStr = qs('#paymentDate').value || todayJalali();
+    let amount = qs('#paymentAmount').value;
+    let type = qs('#paymentType').value || '';
+    let pMonth = qs('#paymentMonth').value;
+    let pYear = qs('#paymentYear').value;
+    let playerId = qs('#paymentPlayer').value;
+    addPayment(dateStr, amount, type, pMonth, pYear, playerId);
+    qs('#paymentAmount').value = '';
+    qs('#paymentDate').value = '';
+    qs('#paymentMonth').value = '';
+    qs('#paymentYear').value = '';
+    qs('#paymentPlayerSearch').value = '';
+  });
+  qs('#paymentPlayerSearch').addEventListener('input', (e) => populatePaymentPlayerSelect(e.target.value));
+  qs('#showDebtorsBtn').addEventListener('click', openDebtorsModal);
+  qs('#reportPaymentsBtn').addEventListener('click', openPaymentReportModal);
+
+  // Backup and Restore
+  qs('#backupBtn').addEventListener('click', () => {
+    let data = JSON.stringify(state);
+    let blob = new Blob([data], {type: 'application/json'});
+    let url = URL.createObjectURL(blob);
+    let a = document.createElement('a');
+    a.href = url;
+    a.download = 'volleyball_backup.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+  qs('#restoreBtn').addEventListener('click', () => {
+    let input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = e => {
+      let file = e.target.files[0];
+      if (!file) return;
+      let reader = new FileReader();
+      reader.onload = ev => {
+        try {
+          let newState = JSON.parse(ev.target.result);
+          state = newState;
+          saveState();
+          alert('بک‌آپ وارد شد');
+          location.reload();
+        } catch (err) {
+          alert('خطا در وارد کردن بک‌آپ');
+        }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  });
+
+  // Initial renders
+  renderHome();
+  renderPlayersPage();
+  renderCoaches();
+  renderSessionsPage();
+  renderPaymentsPage();
+  renderInsurancePage();
+  attachJalaliInputs();
+});
+
+calendar.addEventListener('click', e => e.stopPropagation());
+window.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { hideModal(); hideJalaliCalendar(); }
+});
+window.addEventListener('beforeunload', saveState);
+
+// Global functions for view more links
+window.showAllSessions = showAllSessions;
+window.showAllPayments = showAllPayments;
+</script>
+
+<!-- PWA + Local File Storage Enhancements -->
+<script>
+/* ---- PWA install button ---- */
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const btn = document.getElementById('installPWAButton');
+  if (btn) btn.disabled = false;
+});
+async function installPWA() {
+  if (!deferredPrompt) { alert('امکان نصب در حال حاضر فعال نیست.'); return; }
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+}
+
+/* ---- Add header buttons dynamically (no HTML edits needed) ---- */
+document.addEventListener('DOMContentLoaded', () => {
+  const bar = document.getElementById('desktopControls');
+  if (bar) {
+    const pickBtn = document.createElement('button');
+    pickBtn.id = 'chooseFolderButton';
+    pickBtn.className = 'btn';
+    pickBtn.title = 'انتخاب محل ذخیره';
+    pickBtn.textContent = 'انتخاب محل ذخیره';
+    bar.appendChild(pickBtn);
+
+    const installBtn = document.createElement('button');
+    installBtn.id = 'installPWAButton';
+    installBtn.className = 'btn';
+    installBtn.title = 'نصب برنامه';
+    installBtn.textContent = 'نصب به‌صورت برنامه';
+    installBtn.disabled = true;
+    installBtn.addEventListener('click', installPWA);
+    bar.appendChild(installBtn);
+  }
+});
+
+/* ---- Service Worker Registration ---- */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').catch(console.error);
+  });
+}
+
+/* ---- File System Access API based storage (optional) ---- */
+const FS_META_KEY = 'vb_fs_meta_v1'; // stores picked folder permission
+let fsState = { handle: null, enabled: false, fileName: 'state.json' };
+
+async function restoreFSHandle() {
+  try {
+    const saved = localStorage.getItem(FS_META_KEY);
+    if (!saved) return;
+    const meta = JSON.parse(saved);
+    if (meta && meta.dirHandle && (await navigator.storage?.persist?.())) {
+      // try restore
+      const handle = await window.showDirectoryPicker({ mode: 'readwrite' }); // fallback: re-ask permission
+    }
+  } catch (e) { /* ignore */ }
+}
+
+// if File System API supported, allow choosing folder
+async function chooseFolder() {
+  if (!('showDirectoryPicker' in window)) {
+    alert('مرورگر شما از انتخاب پوشه پشتیبانی نمی‌کند. از کروم/اج جدید استفاده کنید.');
+    return;
+  }
+  try {
+    const dirHandle = await window.showDirectoryPicker({mode: 'readwrite'});
+    // Test permission
+    const perm = await dirHandle.requestPermission({ mode: 'readwrite' });
+    if (perm !== 'granted') { alert('دسترسی داده نشد.'); return; }
+    fsState.handle = dirHandle;
+    fsState.enabled = true;
+    localStorage.setItem(FS_META_KEY, JSON.stringify({ picked: true }));
+    alert('محل ذخیره انتخاب شد. از این پس داده‌ها در فایل state.json داخل پوشه انتخاب‌شده ذخیره می‌شود.');
+    // Immediately persist current state to file
+    if (typeof saveState === 'function') {
+      await saveState(); // will be overridden below
+    }
+  } catch (e) {
+    console.error(e);
+    alert('خطا در انتخاب پوشه');
+  }
+}
+
+// bind chooseFolder button
+document.addEventListener('click', (e) => {
+  if (e.target && e.target.id === 'chooseFolderButton') chooseFolder();
+});
+
+// Wrap original localStorage-based fns
+const __origSaveState = typeof saveState === 'function' ? saveState : null;
+const __origLoadState = typeof loadState === 'function' ? loadState : null;
+
+// Replace save/load to write to local file if enabled
+async function writeFile(dirHandle, name, contents) {
+  const fileHandle = await dirHandle.getFileHandle(name, { create: true });
+  const writable = await fileHandle.createWritable();
+  await writable.write(contents);
+  await writable.close();
+}
+async function readFile(dirHandle, name) {
+  const fileHandle = await dirHandle.getFileHandle(name, { create: false });
+  const file = await fileHandle.getFile();
+  return await file.text();
+}
+
+// Override saveState
+window.saveState = async function() {
+  try {
+    if (fsState.enabled && fsState.handle) {
+      const text = JSON.stringify(state);
+      await writeFile(fsState.handle, fsState.fileName, text);
+    } else if (__origSaveState) {
+      __origSaveState();
+    }
+  } catch (e) {
+    console.error('saveState FS error:', e);
+    if (__origSaveState) __origSaveState();
+  }
+};
+
+// Override loadState
+window.loadState = async function() {
+  try {
+    if (fsState.enabled && fsState.handle) {
+      const text = await readFile(fsState.handle, fsState.fileName);
+      state = JSON.parse(text);
+    } else if (__origLoadState) {
+      __origLoadState();
+    }
+  } catch (e) {
+    console.error('loadState FS error:', e);
+    if (__origLoadState) __origLoadState();
+  }
+};
+</script>
+
+</body>
+</html>
