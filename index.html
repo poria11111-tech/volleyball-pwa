@@ -1,4 +1,4 @@
-
+<DOCUMENT filename="INDEX0010.txt">
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>مدیریت باشگاه والیبال</title>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <style>
   :root {
     --bg: #f4f7fa;
@@ -96,8 +97,8 @@
     width: 100%;
   }
   .menu-icon-btn {
-    width: 44px;
-    height: 44px;
+    width: 48px;
+    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -105,13 +106,15 @@
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
     color: white;
     transition: all 0.3s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   }
   .menu-icon-btn:hover {
-    transform: scale(1.1);
+    transform: scale(1.05) rotate(5deg);
+    box-shadow: 0 4px 12px rgba(14,165,233,0.3);
   }
   .menu-icon-btn svg {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
   }
   .btn {
     background: var(--card);
@@ -121,23 +124,33 @@
     cursor: pointer;
     font-weight: 600;
     font-size: 14px;
-    transition: transform 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
   }
   .btn:hover {
     transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow);
   }
   .btn.primary {
     background: linear-gradient(90deg, var(--accent), var(--accent-2));
     color: #fff;
     border: none;
   }
+  .btn.primary:hover {
+    background: linear-gradient(90deg, var(--accent-2), var(--accent));
+  }
   .btn.danger {
-    background: var(--danger);
+    background: linear-gradient(90deg, var(--danger), #ef4444);
     color: #fff;
   }
+  .btn.danger:hover {
+    background: linear-gradient(90deg, #ef4444, var(--danger));
+  }
   .btn.warning {
-    background: var(--warning);
+    background: linear-gradient(90deg, var(--warning), #fbbf24);
     color: #fff;
+  }
+  .btn.warning:hover {
+    background: linear-gradient(90deg, #fbbf24, var(--warning));
   }
   .btn.small {
     padding: 6px 10px;
@@ -367,6 +380,40 @@
     margin-top: 8px;
     display: inline-block;
   }
+  .mobile-search {
+    display: none;
+    margin-top: 12px;
+  }
+  .note-btn {
+    background: var(--glass);
+    border: 1px solid rgba(0,0,0,0.1);
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  .note-btn.has-note {
+    background: var(--warning);
+    color: #fff;
+  }
+  .settings-section {
+    margin-top: 20px;
+    text-align: center;
+  }
+  .settings-btn {
+    margin: 0 4px;
+  }
+  .profile-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .players-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
   @media (max-width: 768px) {
     .wrap { padding: 12px; }
     .grid { grid-template-columns: 1fr; }
@@ -379,7 +426,24 @@
     .player-row > div:last-child { flex-basis: 100%; display: flex; justify-content: center; gap: 8px; margin-top: 8px; }
     .topbar { flex-direction: column; align-items: stretch; }
     .topbar > div { width: 100%; }
+    .mobile-search { display: block; }
+    .profile-actions { grid-template-columns: repeat(2, 1fr); }
+    .players-preview { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .player-row { flex-direction: column; align-items: center; text-align: center; }
+    .meta { text-align: center; }
   }
+  body.mobile-active .controls { display: none !important; }
+  body.mobile-active .mobile-menu { display: flex !important; }
+  body.mobile-active .mobile-search { display: block !important; }
+  body.mobile-active .grid { grid-template-columns: 1fr !important; }
+  body.mobile-active .form-row { grid-template-columns: 1fr !important; }
+  body.mobile-active .player-row { flex-direction: column !important; align-items: center !important; text-align: center !important; }
+  body.mobile-active .meta { text-align: center !important; }
+  body.mobile-active .players-preview { display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+  body.mobile-active .topbar { flex-direction: column !important; align-items: stretch !important; }
+  body.mobile-active .topbar > div { width: 100% !important; }
+  body.mobile-active .cal-grid { grid-template-columns: repeat(7, 32px) !important; }
+  body.mobile-active .cal-day { width: 32px !important; height: 32px !important; font-size: 13px !important; }
   @media print {
     .no-print { display: none; }
     .modal { box-shadow: none; border: none; }
@@ -387,17 +451,44 @@
   }
 </style>
 
-<link rel="manifest" href="manifest.webmanifest">
+<!-- PWA -->
+<link rel="manifest" href="./manifest.webmanifest">
 <meta name="theme-color" content="#0ea5e9">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png">
+<style>
+  /* شناور: دکمه نصب PWA، پایینِ گوشه راست (برای RTL) */
+  .pwa-install-btn {
+    position: fixed;
+    inset-inline-end: 12px; /* در RTL = راست */
+    inset-block-end: 12px;  /* پایین */
+    right: 12px; bottom: 12px; /* پشتیبان مرورگرهای قدیمی */
+    z-index: 9999;
+    display: none;
+    gap: 6px;
+    align-items: center;
+    background: #0ea5e9;
+    color: #fff;
+    border: none;
+    border-radius: 9999px;
+    padding: 10px 14px;
+    font-size: 14px;
+    box-shadow: 0 8px 18px rgba(14,165,233,.35);
+    cursor: pointer;
+  }
+  .pwa-install-btn svg { width: 18px; height: 18px; }
+  @media print { .pwa-install-btn { display: none !important; } }
+</style>
 
 </head>
 <body>
 <div class="wrap">
   <header>
     <div class="brand">
-      <div class="logo" title="والیبال پوریا">
+      <div class="logo" title="والیبال پوریا" id="appLogo">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="12" cy="12" r="11" fill="#fff" opacity="0.9"/>
           <path d="M5 8c2-2 6-2.5 11-1.5" stroke="#0ea5e9" stroke-width="1.5" stroke-linecap="round"/>
@@ -407,7 +498,7 @@
         </svg>
       </div>
       <div>
-        <h1>مدیریت والیبال پوریا</h1>
+        <h1 id="appTitle">مدیریت والیبال پوریا</h1>
         <div class="muted" style="font-size: 14px;">مدیریت بازیکنان، جلسات و شهریه</div>
       </div>
     </div>
@@ -441,6 +532,9 @@
       <svg viewBox="0 0 24 24"><path d="M12 2l10 6v14H2V8z" stroke="#fff" stroke-width="2" fill="none"/><path d="M8 13l3 3 5-5" stroke="#fff" stroke-width="2" fill="none"/></svg>
     </button>
   </div>
+  <div class="mobile-search" id="mobileSearchContainer">
+    <input id="mobileQuickSearch" class="search" placeholder="جستجوی سریع..." style="width: 100%;" />
+  </div>
 
   <main>
     <div id="view-root">
@@ -451,7 +545,7 @@
               <h3>آخرین بازیکنان</h3>
               <button id="addPlayerBtn" class="btn primary">بازیکن جدید</button>
             </div>
-            <div id="playersPreview" class="players-preview"></div>
+            <div id="playersPreview" class="players-preview players-grid"></div>
             <div style="margin-top: 12px; text-align: center;">
               <button id="showAllPlayersBtn" class="btn">همه بازیکنان</button>
             </div>
@@ -499,6 +593,12 @@
         <div style="text-align: center; margin-top: 20px;">
           <button id="backupBtn" class="btn">بک‌آپ گیری</button>
           <button id="restoreBtn" class="btn">وارد کردن بک‌آپ</button>
+          <button id="chooseStorageBtn" class="btn">انتخاب محل ذخیره</button>
+          <button id="clearDataBtn" class="btn danger">پاک کردن داده‌ها</button>
+          <button id="toggleViewBtn" class="btn">تغییر حالت (موبایل/دسکتاپ)</button>
+        </div>
+        <div class="settings-section">
+          <button id="editSettingsBtn" class="btn">ویرایش تنظیمات</button>
         </div>
       </section>
 
@@ -533,7 +633,7 @@
             <h3>مدیریت جلسات</h3>
             <div>
               <input id="sessionTitle" class="input" placeholder="عنوان جلسه (اختیاری)" />
-              <input id="sessionDate" class="input jalali-input" placeholder="تاریخ جلسه (YYYY/MM/DD)" />
+              <input id="sessionDate" class="input jalali-input" placeholder="تاریخ جلسه (YYYY/MM/DD)" style="text-align: center;" />
               <select id="sessionCategory" class="input"><option value="">همه رده‌ها</option></select>
               <select id="sessionCoach" class="input"><option value="">بدون مربی</option></select>
               <button id="createSessionBtn" class="btn primary">ایجاد جلسه</button>
@@ -575,6 +675,10 @@
         <div class="card">
           <div class="topbar">
             <h3>مدیریت بیمه‌ها</h3>
+            <div>
+              <select id="insuranceCategoryFilter" class="input"><option value="">همه رده‌ها</option></select>
+              <select id="insuranceStatusFilter" class="input"><option value="">همه وضعیت‌ها</option><option value="active">فعال</option><option value="expired">منقضی</option><option value="none">بدون بیمه</option></select>
+            </div>
           </div>
           <div id="insuranceList" class="full-list"></div>
         </div>
@@ -670,6 +774,12 @@ function isInsuranceExpired(insuranceDate) {
   let today = new Date();
   return today > insurance;
 }
+function jalaliToDate(jalali) {
+  if (!jalali) return new Date(0);
+  let parts = jalali.split('/').map(Number);
+  let g = jalali_to_gregorian(parts[0], parts[1], parts[2]);
+  return new Date(g[0], g[1] - 1, g[2]);
+}
 
 /* Image Helper */
 function imageFileToDataURL(file, maxKB) {
@@ -705,7 +815,8 @@ function imageFileToDataURL(file, maxKB) {
 
 /* Storage & State */
 const STORAGE_KEY = 'vb_dashboard_v7';
-let state = { players: [], coaches: [], sessions: [], payments: [] };
+let state = { players: [], coaches: [], sessions: [], payments: [], settings: { title: 'مدیریت والیبال پوریا', logo: '', theme: 'default' } };
+let customStoragePath = null;
 
 function loadState() {
   try {
@@ -781,6 +892,25 @@ const views = {
   insurance: qs('#view-insurance')
 };
 
+function applySettings() {
+  qs('#appTitle').textContent = state.settings.title;
+  if (state.settings.logo) {
+    qs('#appLogo').innerHTML = `<img src="${state.settings.logo}" style="width: 48px; height: 48px;">`;
+  }
+  // Themes
+  let themes = {
+    default: { '--accent': '#0ea5e9', '--accent-2': '#34d399' },
+    theme1: { '--accent': '#ef4444', '--accent-2': '#f97316' },
+    theme2: { '--accent': '#8b5cf6', '--accent-2': '#ec4899' },
+    theme3: { '--accent': '#10b981', '--accent-2': '#3b82f6' },
+    theme4: { '--accent': '#6366f1', '--accent-2': '#a855f7' }
+  };
+  let selectedTheme = themes[state.settings.theme] || themes.default;
+  Object.keys(selectedTheme).forEach(key => {
+    document.documentElement.style.setProperty(key, selectedTheme[key]);
+  });
+}
+
 function showView(name) {
   Object.keys(views).forEach(k => views[k]?.classList.add('hide'));
   views[name]?.classList.remove('hide');
@@ -793,26 +923,23 @@ function showView(name) {
 }
 
 function renderHome() {
-  // آخرین بازیکنان
   let preview = qs('#playersPreview');
   preview.innerHTML = '';
-  let last5 = state.players.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 5);
-  if (last5.length === 0) {
+  let last6 = state.players.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 6);
+  if (last6.length === 0) {
     preview.innerHTML = '<div class="muted" style="padding: 14px; text-align: center;">هنوز بازیکنی ثبت نشده.</div>';
   }
-  last5.forEach(p => {
+  last6.forEach(p => {
     let row = document.createElement('div'); row.className = 'player-row';
     let imgHtml = p.photo ? `<img src="${p.photo}" alt="avatar">` : `<svg width="36" height="36" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e2e8f0"/></svg>`;
     row.innerHTML = `
       <div class="player-thumb">${imgHtml}</div>
       <div class="meta"><strong>${escapeHtml(p.name)}</strong><small>${p.category || '—'} • سن: ${calcAge(p.birthdate) || '—'}</small></div>
-      <div class="badge">${calcAverageScore(p)}</div>
     `;
     row.addEventListener('click', () => openPlayerProfile(p.id));
     preview.appendChild(row);
   });
 
-  // آخرین جلسات
   let sessionsPreview = qs('#sessionsPreview');
   sessionsPreview.innerHTML = '';
   let lastSessions = state.sessions.slice().sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
@@ -830,7 +957,6 @@ function renderHome() {
     });
   }
 
-  // آخرین پرداخت‌ها
   let paymentsPreview = qs('#paymentsPreview');
   paymentsPreview.innerHTML = '';
   let lastPayments = state.payments.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 3);
@@ -847,7 +973,6 @@ function renderHome() {
     });
   }
 
-  // بیمه‌های منقضی
   let expiredInsurances = qs('#expiredInsurances');
   expiredInsurances.innerHTML = '';
   let expired = state.players.filter(p => isInsuranceExpired(p.insuranceDate)).slice(0, 3);
@@ -868,6 +993,7 @@ function renderHome() {
   }
 
   renderStats();
+  applySettings();
 }
 
 function calculateLastPeriodSum() {
@@ -1077,197 +1203,126 @@ function fillMonthYear(monthId, yearId, selectedMonth, selectedYear) {
   }
 }
 
-function populateCategoryAndCoach() {
-  populateCategoryFilter(qs('#sessionCategory'));
-  populateCoachSelect(qs('#sessionCoach'));
-}
-
-function renderSessionsPage() {
-  populateCategoryAndCoach();
-  let container = qs('#sessionsList');
-  container.innerHTML = '';
-  if (!state.sessions?.length) {
-    container.innerHTML = '<div class="muted">هیچ جلسه‌ای ثبت نشده.</div>';
-    return;
-  }
-  state.sessions.slice().sort((a, b) => new Date(b.date) - new Date(a.date)).forEach(s => {
-    let cat = s.category || 'همه رده‌ها';
-    let coach = state.coaches.find(c => c.id === s.coachId)?.name || 'بدون مربی';
-    let node = document.createElement('div');
-    node.className = 'player-row';
-    node.innerHTML = `
-      <div class="meta">
-        <strong>${escapeHtml(s.title || 'جلسه')}</strong>
-        <small>تاریخ: ${isoToJalali(s.date)} • رده: ${cat} • مربی: ${coach}</small>
-      </div>
-      <div style="display: flex; gap: 8px;">
-        <button class="btn small" data-id="${s.id}" data-act="view">حضورغیاب</button>
-        <button class="btn small" data-id="${s.id}" data-act="del" style="background: transparent;">حذف</button>
-      </div>
-    `;
-    node.querySelector('[data-act="view"]').addEventListener('click', () => openSessionAttendance(s.id));
-    node.querySelector('[data-act="del"]').addEventListener('click', () => {
-      if (confirm('حذف جلسه؟')) {
-        state.sessions = state.sessions.filter(x => x.id !== s.id);
-        saveState();
-        renderSessionsPage();
-        renderHome();
-      }
-    });
-    container.appendChild(node);
-  });
-}
-
-function populatePaymentPlayerSelect(searchQuery = '') {
-  let sel = qs('#paymentPlayer');
-  sel.innerHTML = '<option value="">انتخاب بازیکن</option>';
-  let filteredPlayers = state.players;
-  if (searchQuery) {
-    filteredPlayers = state.players.filter(p => normPersian(p.name).includes(normPersian(searchQuery)));
-  }
-  filteredPlayers.forEach(p => {
+function populatePaymentPlayerSelect(q = '') {
+  let select = qs('#paymentPlayer');
+  select.innerHTML = '<option value="">انتخاب بازیکن</option>';
+  let players = state.players.filter(p => !q || normPersian(p.name).includes(normPersian(q)));
+  players.forEach(p => {
     let o = document.createElement('option');
     o.value = p.id;
     o.textContent = p.name;
-    sel.appendChild(o);
-  });
-  if (filteredPlayers.length === 1) {
-    sel.value = filteredPlayers[0].id;
-  }
-}
-
-function renderPaymentsPage() {
-  populatePaymentPlayerSelect();
-  fillMonthYear('paymentMonth', 'paymentYear');
-  let list = qs('#paymentList');
-  list.innerHTML = '';
-  if (!state.payments?.length) {
-    list.innerHTML = '<div class="muted">هیچ پرداختی ثبت نشده.</div>';
-    return;
-  }
-  state.payments.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).forEach(pay => {
-    let pl = state.players.find(x => x.id === pay.playerId);
-    let period = pay.paymentMonth && pay.paymentYear ? `${pay.paymentMonth}/${pay.paymentYear}` : '—';
-    let item = document.createElement('div');
-    item.className = 'player-row';
-    item.innerHTML = `
-      <div class="meta">
-        <strong>${pl ? escapeHtml(pl.name) : '—'}</strong>
-        <small>${isoToJalali(pay.date)} • ${pay.type || '—'} • دوره: ${period}</small>
-      </div>
-      <div style="display: flex; gap: 8px; align-items: center;">
-        <div style="font-weight: 700;">${Number(pay.amount).toLocaleString()} تومان</div>
-        <button class="btn small" data-act="edit" data-id="${pay.id}">ویرایش</button>
-        <button class="btn small danger" data-act="del" data-id="${pay.id}">حذف</button>
-      </div>
-    `;
-    item.querySelector('[data-act="edit"]').addEventListener('click', () => editPayment(pay));
-    item.querySelector('[data-act="del"]').addEventListener('click', () => {
-      if (confirm('حذف پرداخت؟')) {
-        state.payments = state.payments.filter(x => x.id !== pay.id);
-        saveState();
-        renderPaymentsPage();
-        renderHome();
-      }
-    });
-    list.appendChild(item);
-  });
-  qs('#paymentPlayerSearch').addEventListener('input', (e) => populatePaymentPlayerSelect(e.target.value));
-}
-
-function editPayment(pay) {
-  let player = state.players.find(x => x.id === pay.playerId);
-  let html = `
-    <h3>ویرایش پرداخت برای ${escapeHtml(player.name)}</h3>
-    <div style="display: grid; gap: 12px; margin-top: 12px;">
-      <label for="modal_paymentDate">تاریخ پرداخت</label>
-      <input id="modal_paymentDate" class="input jalali-input" placeholder="YYYY/MM/DD" value="${isoToJalali(pay.date)}" />
-      <label>دوره پرداخت</label>
-      <div style="display: flex; gap: 8px;">
-        <select id="modal_paymentMonth" class="input"><option value="">ماه</option></select>
-        <select id="modal_paymentYear" class="input"><option value="">سال</option></select>
-      </div>
-      <label for="modal_paymentAmount">مبلغ (تومان)</label>
-      <input id="modal_paymentAmount" class="input" placeholder="مثال: 500000" type="number" value="${pay.amount}" />
-      <label for="modal_paymentType">نوع پرداخت</label>
-      <select id="modal_paymentType" class="input"><option value="">نوع پرداخت</option><option>نقد</option><option>رسید</option><option>کارت به کارت</option></select>
-      <div class="form-actions">
-        <button id="saveEditPaymentBtn" class="btn primary">ذخیره</button>
-        <button id="cancelEditPaymentBtn" class="btn">انصراف</button>
-      </div>
-    </div>
-  `;
-  showModal(html);
-  fillMonthYear('modal_paymentMonth', 'modal_paymentYear', pay.paymentMonth, pay.paymentYear);
-  qs('#modal_paymentType').value = pay.type || '';
-  qs('#cancelEditPaymentBtn').addEventListener('click', hideModal);
-  qs('#saveEditPaymentBtn').addEventListener('click', () => {
-    let dateStr = qs('#modal_paymentDate').value || todayJalali();
-    let amount = qs('#modal_paymentAmount').value;
-    let type = qs('#modal_paymentType').value || '';
-    let pMonth = qs('#modal_paymentMonth').value;
-    let pYear = qs('#modal_paymentYear').value;
-    if (!amount || amount <= 0) return alert('مبلغ معتبر وارد کنید');
-    let idx = state.payments.findIndex(x => x.id === pay.id);
-    if (idx > -1) {
-      state.payments[idx] = {
-        ...state.payments[idx],
-        amount: Number(amount),
-        date: jalaliToISO(dateStr),
-        type: type,
-        paymentMonth: pMonth ? Number(pMonth) : null,
-        paymentYear: pYear ? Number(pYear) : null,
-        updatedAt: new Date().toISOString()
-      };
-      saveState();
-      renderPaymentsPage();
-      renderHome();
-      hideModal();
-    }
-  });
-}
-
-function renderInsurancePage() {
-  let list = qs('#insuranceList');
-  list.innerHTML = '';
-  if (!state.players.length) {
-    list.innerHTML = '<div class="muted">هیچ بازیکنی ثبت نشده.</div>';
-    return;
-  }
-  state.players.forEach(p => {
-    let node = document.createElement('div');
-    node.className = 'player-row';
-    let imgHtml = p.photo ? `<img src="${p.photo}">` : `<svg width="36" height="36" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e2e8f0"/></svg>`;
-    let expired = isInsuranceExpired(p.insuranceDate);
-    let status = p.insuranceDate ? (expired ? 'منقضی' : 'فعال') : 'ثبت نشده';
-    let badgeClass = expired ? 'danger' : (p.insuranceDate ? '' : 'warning');
-    node.innerHTML = `
-      <div class="player-thumb">${imgHtml}</div>
-      <div class="meta"><strong>${escapeHtml(p.name)}</strong><small>${p.category || '—'} • ${p.insuranceDate || '—'}</small></div>
-      <div class="badge ${badgeClass}">${status}</div>
-    `;
-    node.addEventListener('click', () => openPlayerModal(p));
-    list.appendChild(node);
+    select.appendChild(o);
   });
 }
 
 function addPayment(dateStr, amount, type, pMonth, pYear, playerId) {
-  if (!playerId) return alert('بازیکن انتخاب نشده');
-  if (!amount || amount <= 0) return alert('مبلغ معتبر وارد کنید');
-  let pay = {
-    id: uid('pay'),
-    playerId: playerId,
-    amount: Number(amount),
-    date: jalaliToISO(dateStr),
-    type: type,
-    paymentMonth: pMonth ? Number(pMonth) : null,
-    paymentYear: pYear ? Number(pYear) : null,
+  if (!playerId || !amount) return alert('بازیکن و مبلغ را وارد کنید');
+  let payment = {
+    playerId, amount: parseInt(amount), date: jalaliToISO(dateStr), type,
+    paymentMonth: parseInt(pMonth), paymentYear: parseInt(pYear),
     createdAt: new Date().toISOString()
   };
-  state.payments.unshift(pay);
+  state.payments.push(payment);
   saveState();
   renderPaymentsPage();
   renderHome();
+}
+
+function renderPaymentsPage() {
+  populatePaymentPlayerSelect(qs('#paymentPlayerSearch').value);
+  fillMonthYear('paymentMonth', 'paymentYear');
+  let list = qs('#paymentList');
+  list.innerHTML = '';
+  let payments = state.payments.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  if (payments.length === 0) {
+    list.innerHTML = '<div class="muted">هیچ پرداختی ثبت نشده.</div>';
+    return;
+  }
+  payments.forEach(pay => {
+    let player = state.players.find(p => p.id === pay.playerId);
+    let row = document.createElement('div');
+    row.className = 'player-row';
+    row.innerHTML = `
+      <div class="meta"><strong>${player ? escapeHtml(player.name) : '—'}</strong><small>${isoToJalali(pay.date)} • ${Number(pay.amount).toLocaleString()} تومان • ${pay.type || '—'} • دوره: ${pay.paymentMonth}/${pay.paymentYear}</small></div>
+      <button class="btn small danger" data-del="${pay.createdAt}">حذف</button>
+    `;
+    row.querySelector('[data-del]').addEventListener('click', () => {
+      if (confirm('حذف پرداخت؟')) {
+        state.payments = state.payments.filter(x => x.createdAt !== pay.createdAt);
+        saveState();
+        renderPaymentsPage();
+      }
+    });
+    list.appendChild(row);
+  });
+}
+
+function renderSessionsPage() {
+  populateCategoryFilter(qs('#sessionCategory'));
+  populateCoachSelect(qs('#sessionCoach'));
+  let list = qs('#sessionsList');
+  list.innerHTML = '';
+  let sessions = state.sessions.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+  if (sessions.length === 0) {
+    list.innerHTML = '<div class="muted">هیچ جلسه‌ای ثبت نشده.</div>';
+    return;
+  }
+  sessions.forEach(s => {
+    let row = document.createElement('div');
+    row.className = 'player-row';
+    let coach = state.coaches.find(c => c.id === s.coachId);
+    let attendees = Object.values(s.attendances || {}).filter(a => a.present).length;
+    row.innerHTML = `
+      <div class="meta"><strong>${escapeHtml(s.title || 'جلسه تمرین')}</strong><small>${isoToJalali(s.date)} • ${s.category || '—'} • ${coach?.name || 'بدون مربی'} • حاضرین: ${attendees}</small></div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn small" data-att="${s.id}">حضور/غیاب</button>
+        <button class="btn small danger" data-del="${s.id}">حذف</button>
+      </div>
+    `;
+    row.querySelector('[data-att]').addEventListener('click', () => openSessionAttendance(s.id));
+    row.querySelector('[data-del]').addEventListener('click', () => {
+      if (confirm('حذف جلسه؟')) {
+        state.sessions = state.sessions.filter(x => x.id !== s.id);
+        saveState();
+        renderSessionsPage();
+      }
+    });
+    list.appendChild(row);
+  });
+}
+
+function renderInsurancePage() {
+  populateCategoryFilter(qs('#insuranceCategoryFilter'));
+  let list = qs('#insuranceList');
+  list.innerHTML = '';
+  let cat = qs('#insuranceCategoryFilter').value;
+  let status = qs('#insuranceStatusFilter').value;
+  let arr = state.players.slice();
+  if (cat) arr = arr.filter(p => p.category === cat);
+  if (status === 'active') arr = arr.filter(p => p.insuranceDate && !isInsuranceExpired(p.insuranceDate));
+  if (status === 'expired') arr = arr.filter(p => p.insuranceDate && isInsuranceExpired(p.insuranceDate));
+  if (status === 'none') arr = arr.filter(p => !p.insuranceDate);
+  arr.sort((a, b) => a.name.localeCompare(b.name, 'fa'));
+  if (arr.length === 0) {
+    list.innerHTML = '<div class="muted">موردی یافت نشد.</div>';
+    return;
+  }
+  arr.forEach(p => {
+    let expired = isInsuranceExpired(p.insuranceDate);
+    let statusBadge = !p.insuranceDate ? '<div class="badge warning">بدون بیمه</div>' :
+      expired ? '<div class="badge danger">منقضی</div>' : '<div class="badge">فعال</div>';
+    let row = document.createElement('div');
+    row.className = 'player-row';
+    let imgHtml = p.photo ? `<img src="${p.photo}">` : `<svg width="36" height="36" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e2e8f0"/></svg>`;
+    row.innerHTML = `
+      <div class="player-thumb">${imgHtml}</div>
+      <div class="meta"><strong>${escapeHtml(p.name)}</strong><small>${p.category || '—'} • تاریخ بیمه: ${p.insuranceDate || '—'}</small></div>
+      ${statusBadge}
+      <button class="btn small" data-edit="${p.id}">ویرایش بیمه</button>
+    `;
+    row.querySelector('[data-edit]').addEventListener('click', () => openPlayerModal(p));
+    list.appendChild(row);
+  });
 }
 
 function openPaymentModal(playerId) {
@@ -1316,7 +1371,12 @@ function openDebtorsModal() {
     return jDate[0] === curYear && jDate[1] === curMonth;
   });
   let debtors = state.players.filter(p => {
-    let attended = currentSessions.filter(s => s.attendances?.[p.id]?.present).length >= 4;
+    let playerJoinDate = jalaliToDate(p.joinDate);
+    let attendedSessions = currentSessions.filter(s => {
+      let sessionDate = jalaliToDate(isoToJalali(s.date));
+      return sessionDate >= playerJoinDate && s.attendances?.[p.id]?.present;
+    });
+    let attended = attendedSessions.length >= 4;
     let paid = state.payments.some(pay => pay.playerId === p.id && pay.paymentMonth === curMonth && pay.paymentYear === curYear);
     return attended && !paid;
   });
@@ -1619,7 +1679,7 @@ function openPlayerProfile(id) {
   let html = `
     <div style="text-align: center;">
       <div style="width: 160px; height: 160px; border-radius: 12px; overflow: hidden; background: #e2e8f0; margin: 0 auto;">
-        ${p.photo ? `<img src="${p.photo}" style="width: 100%; height: 100%; object-fit: cover;">` : '<div class="muted">بدون عکس</div>'}
+        ${p.photo ? `<img id="profileImg" src="${p.photo}" style="width: 100%; height: 100%; object-fit: cover;">` : '<div class="muted">بدون عکس</div>'}
       </div>
       <h3 style="margin-top: 12px;">${escapeHtml(p.name)}</h3>
       <div class="muted">رده: ${p.category || '—'}</div>
@@ -1651,13 +1711,13 @@ function openPlayerProfile(id) {
         <div><strong>پرداخت‌ها (${payments.length}):</strong>
           ${payments.length ? `
             <div style="margin-top: 8px; max-height: 200px; overflow: auto;">
-              ${payments.slice(0, 5).map(p => `<div>${p.amount} تومان - ${p.date} - دوره: ${p.period} (${p.type})</div>`).join('')}
-              ${payments.length > 5 ? `<a href="#" onclick="showAllPayments('${p.id}')" class="view-more">مشاهده همه پرداخت‌ها (${payments.length})</a>` : ''}
+              ${payments.slice(0, 3).map(p => `<div>${p.amount} تومان - ${p.date} - دوره: ${p.period} (${p.type})</div>`).join('')}
+              ${payments.length > 3 ? `<a href="#" onclick="showAllPayments('${p.id}')" class="view-more">مشاهده همه پرداخت‌ها (${payments.length})</a>` : ''}
             </div>
           ` : '<div class="muted">هیچ پرداختی</div>'}
         </div>
       </div>
-      <div class="form-actions">
+      <div class="profile-actions form-actions">
         <button id="editFromProfile" class="btn">ویرایش</button>
         <button id="addPaymentFromProfile" class="btn primary">ثبت پرداخت</button>
         <button id="shareProfile" class="btn">اشتراک‌گذاری</button>
@@ -1670,13 +1730,27 @@ function openPlayerProfile(id) {
   qs('#editFromProfile').addEventListener('click', () => { hideModal(); openPlayerModal(p); });
   qs('#addPaymentFromProfile').addEventListener('click', () => { hideModal(); openPaymentModal(p.id); });
   qs('#shareProfile').addEventListener('click', () => {
-    let text = `پروفایل ${p.name}\nرده: ${p.category || '—'}\nبیمه: ${insuranceStatus}\nپست: ${p.favoritePosition || '—'}\nتلفن: ${p.phone || '—'}\nنام پدر: ${p.fatherName || '—'}\nتاریخ تولد: ${p.birthdate || '—'}\nسن: ${calcAge(p.birthdate) || '—'}\nقد/وزن: ${p.height || '—'}cm / ${p.weight || '—'}kg\nتاریخ عضویت: ${p.joinDate || '—'}\nامتیاز کلی: ${avgScore}\nامتیازات: ${Object.keys(scores).map(key => `${key}: ${scores[key]}`).join(', ')}\nجلسات: ${sessions.length}\nپرداخت‌ها: ${payments.length}`;
-    if (navigator.share) {
-      navigator.share({ title: 'پروفایل بازیکن', text });
-    } else {
-      navigator.clipboard.writeText(text).then(() => alert('پروفایل در کلیپ‌بورد کپی شد'));
-    }
+    html2canvas(qs('#modalContent')).then(canvas => {
+      let imgData = canvas.toDataURL('image/png');
+      if (navigator.share) {
+        navigator.share({ title: 'پروفایل به عنوان تصویر', files: [new File([dataURLtoBlob(imgData)], 'profile.png', {type: 'image/png'})] });
+      } else {
+        let a = document.createElement('a');
+        a.href = imgData;
+        a.download = 'profile.png';
+        a.click();
+      }
+    });
   });
+}
+
+function dataURLtoBlob(dataurl) {
+  let arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], {type:mime});
 }
 
 function showAllSessions(playerId) {
@@ -1825,19 +1899,22 @@ function createSession() {
 function openSessionAttendance(id) {
   let s = state.sessions.find(x => x.id === id);
   if (!s) return;
+  let sessionDate = jalaliToDate(isoToJalali(s.date));
   let html = `
     <h3>حضور/غیاب — ${escapeHtml(s.title)}</h3>
     <div style="max-height: 60vh; overflow: auto; margin-top: 12px;">
   `;
-  let filteredPlayers = state.players;
+  let filteredPlayers = state.players.filter(p => jalaliToDate(p.joinDate) <= sessionDate);
   if (s.category) filteredPlayers = filteredPlayers.filter(p => p.category === s.category);
   filteredPlayers.forEach(p => {
     let att = s.attendances?.[p.id] || { present: false, reason: '' };
+    let imgHtml = p.photo ? `<img src="${p.photo}" alt="avatar">` : `<svg width="36" height="36" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e2e8f0"/></svg>`;
     html += `
       <div style="display: flex; align-items: center; gap: 12px; padding: 8px; border-bottom: 1px dashed rgba(0,0,0,0.06);">
+        <div class="player-thumb">${imgHtml}</div>
         <div class="meta"><strong>${escapeHtml(p.name)}</strong><small>${p.category || ''}</small></div>
         <label style="display: flex; gap: 8px;"><input type="checkbox" data-player="${p.id}" ${att.present ? 'checked' : ''}> حاضر</label>
-        <input type="text" data-reason="${p.id}" placeholder="علت" value="${escapeHtml(att.reason || '')}" style="width: 160px;">
+        <button class="note-btn${att.reason ? ' has-note' : ''}" data-reason-btn="${p.id}">یادداشت</button>
       </div>
     `;
   });
@@ -1850,19 +1927,91 @@ function openSessionAttendance(id) {
   `;
   showModal(html);
   qs('#closeAttendance').addEventListener('click', hideModal);
+  qsa('[data-reason-btn]').forEach(btn => {
+    let pid = btn.dataset.reasonBtn;
+    let att = s.attendances?.[pid] || { reason: '' };
+    btn.addEventListener('click', () => openNoteModal(pid, att.reason, (newReason) => {
+      s.attendances[pid] = { ...s.attendances[pid], reason: newReason };
+      if (newReason) btn.classList.add('has-note');
+      else btn.classList.remove('has-note');
+    }));
+  });
   qs('#saveAttendance').addEventListener('click', () => {
     filteredPlayers.forEach(p => {
       let cb = qs(`[data-player="${p.id}"]`);
-      let reason = qs(`[data-reason="${p.id}"]`);
       if (cb) {
-        s.attendances = s.attendances || {};
-        s.attendances[p.id] = { present: !!cb.checked, reason: reason ? reason.value : '' };
+        s.attendances[p.id] = { ...s.attendances[p.id], present: !!cb.checked };
       }
     });
     saveState();
     hideModal();
     renderSessionsPage();
     renderHome();
+  });
+}
+
+function openNoteModal(playerId, currentNote, callback) {
+  let html = `
+    <h3>یادداشت برای بازیکن</h3>
+    <textarea id="noteText" class="input" style="height: 120px; margin-top: 12px;">${escapeHtml(currentNote)}</textarea>
+    <div class="form-actions">
+      <button id="saveNote" class="btn primary">ذخیره</button>
+      <button id="cancelNote" class="btn">انصراف</button>
+    </div>
+  `;
+  showModal(html);
+  qs('#cancelNote').addEventListener('click', hideModal);
+  qs('#saveNote').addEventListener('click', () => {
+    let newNote = qs('#noteText').value.trim();
+    callback(newNote);
+    hideModal();
+  });
+}
+
+function openSettingsModal() {
+  let dataSize = (localStorage.getItem(STORAGE_KEY)?.length / 1024 || 0).toFixed(2);
+  let html = `
+    <h3>ویرایش تنظیمات</h3>
+    <div style="display: grid; gap: 12px; margin-top: 12px;">
+      <label for="settingsTitle">عنوان برنامه</label>
+      <input id="settingsTitle" class="input" value="${state.settings.title}" />
+      <label>لوگو</label>
+      <input id="settingsLogo" type="file" accept="image/*" />
+      <label>تم برنامه</label>
+      <select id="settingsTheme" class="input">
+        <option value="default" ${state.settings.theme === 'default' ? 'selected' : ''}>پیش‌فرض (آبی/سبز)</option>
+        <option value="theme1" ${state.settings.theme === 'theme1' ? 'selected' : ''}>قرمز/نارنجی</option>
+        <option value="theme2" ${state.settings.theme === 'theme2' ? 'selected' : ''}>بنفش/صورتی</option>
+        <option value="theme3" ${state.settings.theme === 'theme3' ? 'selected' : ''}>سبز/آبی</option>
+        <option value="theme4" ${state.settings.theme === 'theme4' ? 'selected' : ''}>آبی تیره/بنفش</option>
+      </select>
+      <div>حجم داده‌های ذخیره شده: ${dataSize} KB</div>
+      <div class="form-actions">
+        <button id="saveSettings" class="btn primary">ذخیره</button>
+        <button id="cancelSettings" class="btn">انصراف</button>
+      </div>
+    </div>
+  `;
+  showModal(html);
+  qs('#cancelSettings').addEventListener('click', hideModal);
+  qs('#saveSettings').addEventListener('click', () => {
+    state.settings.title = qs('#settingsTitle').value || 'مدیریت والیبال پوریا';
+    state.settings.theme = qs('#settingsTheme').value;
+    let file = qs('#settingsLogo').files[0];
+    if (file) {
+      imageFileToDataURL(file, 100).then(data => {
+        state.settings.logo = data;
+        saveState();
+        applySettings();
+        hideModal();
+        renderHome();
+      });
+    } else {
+      saveState();
+      applySettings();
+      hideModal();
+      renderHome();
+    }
   });
 }
 
@@ -2031,7 +2180,6 @@ function attachJalaliInputs() {
 
 /* Event Binding & Init */
 document.addEventListener('DOMContentLoaded', () => {
-  // Desktop menu
   qs('#homeBtn').addEventListener('click', () => showView('home'));
   qs('#playersBtn').addEventListener('click', () => showView('players'));
   qs('#coachesBtn').addEventListener('click', () => showView('coaches'));
@@ -2039,7 +2187,6 @@ document.addEventListener('DOMContentLoaded', () => {
   qs('#paymentsBtn').addEventListener('click', () => showView('payments'));
   qs('#insuranceBtn').addEventListener('click', () => showView('insurance'));
 
-  // Mobile menu
   qs('#homeMenu').addEventListener('click', () => showView('home'));
   qs('#playersMenu').addEventListener('click', () => showView('players'));
   qs('#coachesMenu').addEventListener('click', () => showView('coaches'));
@@ -2047,7 +2194,6 @@ document.addEventListener('DOMContentLoaded', () => {
   qs('#paymentsMenu').addEventListener('click', () => showView('payments'));
   qs('#insuranceMenu').addEventListener('click', () => showView('insurance'));
 
-  // Buttons
   qs('#addPlayerBtn').addEventListener('click', () => openPlayerModal(null));
   qs('#openAddPlayerFromList').addEventListener('click', () => openPlayerModal(null));
   qs('#addCoachBtn').addEventListener('click', () => openCoachModal(null));
@@ -2057,6 +2203,11 @@ document.addEventListener('DOMContentLoaded', () => {
     qs('#sessionDate').value = todayJalali();
   });
   qs('#quickSearch').addEventListener('input', e => {
+    showView('players');
+    qs('#playersSearch').value = e.target.value;
+    renderPlayersPage();
+  });
+  qs('#mobileQuickSearch').addEventListener('input', e => {
     showView('players');
     qs('#playersSearch').value = e.target.value;
     renderPlayersPage();
@@ -2086,8 +2237,43 @@ document.addEventListener('DOMContentLoaded', () => {
   qs('#paymentPlayerSearch').addEventListener('input', (e) => populatePaymentPlayerSelect(e.target.value));
   qs('#showDebtorsBtn').addEventListener('click', openDebtorsModal);
   qs('#reportPaymentsBtn').addEventListener('click', openPaymentReportModal);
+  qs('#insuranceCategoryFilter').addEventListener('change', renderInsurancePage);
+  qs('#insuranceStatusFilter').addEventListener('change', renderInsurancePage);
+  qs('#editSettingsBtn').addEventListener('click', openSettingsModal);
+  qs('#chooseStorageBtn').addEventListener('click', () => {
+    let input = document.createElement('input');
+    input.type = 'file';
+    input.webkitdirectory = true;
+    input.onchange = e => {
+      customStoragePath = e.target.files[0].path;
+      alert('محل ذخیره انتخاب شد: ' + customStoragePath);
+    };
+    input.click();
+  });
+  qs('#clearDataBtn').addEventListener('click', () => {
+    if (confirm('آیا می‌خواهید ابتدا بک‌آپ بگیرید؟')) {
+      qs('#backupBtn').click();
+      let input = document.createElement('input');
+      input.type = 'file';
+      input.webkitdirectory = true;
+      input.onchange = e => {
+        customStoragePath = e.target.files[0].path;
+        if (confirm('آیا مطمئن هستید که همه داده‌ها پاک شوند؟')) {
+          localStorage.clear();
+          state = { players: [], coaches: [], sessions: [], payments: [], settings: { title: 'مدیریت والیبال پوریا', logo: '', theme: 'default' } };
+          location.reload();
+        }
+      };
+      input.click();
+    } else {
+      if (confirm('آیا مطمئن هستید که همه داده‌ها پاک شوند؟')) {
+        localStorage.clear();
+        state = { players: [], coaches: [], sessions: [], payments: [], settings: { title: 'مدیریت والیبال پوریا', logo: '', theme: 'default' } };
+        location.reload();
+      }
+    }
+  });
 
-  // Backup and Restore
   qs('#backupBtn').addEventListener('click', () => {
     let data = JSON.stringify(state);
     let blob = new Blob([data], {type: 'application/json'});
@@ -2122,7 +2308,23 @@ document.addEventListener('DOMContentLoaded', () => {
     input.click();
   });
 
-  // Initial renders
+  qs('#toggleViewBtn').addEventListener('click', () => {
+    document.body.classList.toggle('mobile-active');
+    if (document.body.classList.contains('mobile-active')) {
+      qs('#desktopControls').style.display = 'none';
+      qs('#mobileMenu').style.display = 'flex';
+      qs('#mobileSearchContainer').style.display = 'block';
+      qs('#toggleViewBtn').textContent = 'تغییر حالت (دسکتاپ)';
+    } else {
+      qs('#desktopControls').style.display = 'flex';
+      qs('#mobileMenu').style.display = 'none';
+      qs('#mobileSearchContainer').style.display = 'none';
+      qs('#toggleViewBtn').textContent = 'تغییر حالت (موبایل)';
+    }
+    renderHome(); // Re-render to adjust layout
+  });
+
+  applySettings();
   renderHome();
   renderPlayersPage();
   renderCoaches();
@@ -2138,150 +2340,64 @@ window.addEventListener('keydown', e => {
 });
 window.addEventListener('beforeunload', saveState);
 
-// Global functions for view more links
 window.showAllSessions = showAllSessions;
 window.showAllPayments = showAllPayments;
 </script>
 
-<!-- PWA + Local File Storage Enhancements -->
+<!-- PWA: دکمه نصب و رجیستر سرویس‌ورکر -->
+<button id="installPWA" class="pwa-install-btn" aria-label="نصب اپ">
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 3v12m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M3 15v3a3 3 0 003 3h12a3 3 0 003-3v-3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  دانلود اپ
+</button>
 <script>
-/* ---- PWA install button ---- */
-let deferredPrompt = null;
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  const btn = document.getElementById('installPWAButton');
-  if (btn) btn.disabled = false;
-});
-async function installPWA() {
-  if (!deferredPrompt) { alert('امکان نصب در حال حاضر فعال نیست.'); return; }
-  deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
-  deferredPrompt = null;
-}
+(function() {
+  // اگر اپ از قبل نصب شده، دکمه را پنهان کنیم
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  const btn = document.getElementById('installPWA');
+  if (isStandalone) { btn && (btn.style.display = 'none'); }
 
-/* ---- Add header buttons dynamically (no HTML edits needed) ---- */
-document.addEventListener('DOMContentLoaded', () => {
-  const bar = document.getElementById('desktopControls');
-  if (bar) {
-    const pickBtn = document.createElement('button');
-    pickBtn.id = 'chooseFolderButton';
-    pickBtn.className = 'btn';
-    pickBtn.title = 'انتخاب محل ذخیره';
-    pickBtn.textContent = 'انتخاب محل ذخیره';
-    bar.appendChild(pickBtn);
-
-    const installBtn = document.createElement('button');
-    installBtn.id = 'installPWAButton';
-    installBtn.className = 'btn';
-    installBtn.title = 'نصب برنامه';
-    installBtn.textContent = 'نصب به‌صورت برنامه';
-    installBtn.disabled = true;
-    installBtn.addEventListener('click', installPWA);
-    bar.appendChild(installBtn);
-  }
-});
-
-/* ---- Service Worker Registration ---- */
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js').catch(console.error);
+  let deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (btn) btn.style.display = 'flex';
   });
-}
 
-/* ---- File System Access API based storage (optional) ---- */
-const FS_META_KEY = 'vb_fs_meta_v1'; // stores picked folder permission
-let fsState = { handle: null, enabled: false, fileName: 'state.json' };
+  window.addEventListener('appinstalled', () => {
+    if (btn) btn.style.display = 'none';
+    deferredPrompt = null;
+    try { localStorage.setItem('pwa_installed', '1'); } catch(e) {}
+  });
 
-async function restoreFSHandle() {
-  try {
-    const saved = localStorage.getItem(FS_META_KEY);
-    if (!saved) return;
-    const meta = JSON.parse(saved);
-    if (meta && meta.dirHandle && (await navigator.storage?.persist?.())) {
-      // try restore
-      const handle = await window.showDirectoryPicker({ mode: 'readwrite' }); // fallback: re-ask permission
-    }
-  } catch (e) { /* ignore */ }
-}
-
-// if File System API supported, allow choosing folder
-async function chooseFolder() {
-  if (!('showDirectoryPicker' in window)) {
-    alert('مرورگر شما از انتخاب پوشه پشتیبانی نمی‌کند. از کروم/اج جدید استفاده کنید.');
-    return;
+  if (btn) {
+    btn.addEventListener('click', async () => {
+      if (!deferredPrompt) {
+        // iOS یا مرورگرهای بدون پشتیبانی
+        alert('برای افزودن به صفحهٔ اصلی، از منوی مرورگر گزینهٔ “Add to Home Screen” را بزنید.');
+        return;
+      }
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      if (outcome !== 'accepted') {
+        // اگر کاربر منصرف شد، دکمه را به گوشه نگه می‌داریم و مزاحم نمی‌شویم
+        if (btn) btn.style.display = 'flex';
+      } else {
+        if (btn) btn.style.display = 'none';
+      }
+    });
   }
-  try {
-    const dirHandle = await window.showDirectoryPicker({mode: 'readwrite'});
-    // Test permission
-    const perm = await dirHandle.requestPermission({ mode: 'readwrite' });
-    if (perm !== 'granted') { alert('دسترسی داده نشد.'); return; }
-    fsState.handle = dirHandle;
-    fsState.enabled = true;
-    localStorage.setItem(FS_META_KEY, JSON.stringify({ picked: true }));
-    alert('محل ذخیره انتخاب شد. از این پس داده‌ها در فایل state.json داخل پوشه انتخاب‌شده ذخیره می‌شود.');
-    // Immediately persist current state to file
-    if (typeof saveState === 'function') {
-      await saveState(); // will be overridden below
-    }
-  } catch (e) {
-    console.error(e);
-    alert('خطا در انتخاب پوشه');
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('./sw.js').catch(console.warn);
+    });
   }
-}
-
-// bind chooseFolder button
-document.addEventListener('click', (e) => {
-  if (e.target && e.target.id === 'chooseFolderButton') chooseFolder();
-});
-
-// Wrap original localStorage-based fns
-const __origSaveState = typeof saveState === 'function' ? saveState : null;
-const __origLoadState = typeof loadState === 'function' ? loadState : null;
-
-// Replace save/load to write to local file if enabled
-async function writeFile(dirHandle, name, contents) {
-  const fileHandle = await dirHandle.getFileHandle(name, { create: true });
-  const writable = await fileHandle.createWritable();
-  await writable.write(contents);
-  await writable.close();
-}
-async function readFile(dirHandle, name) {
-  const fileHandle = await dirHandle.getFileHandle(name, { create: false });
-  const file = await fileHandle.getFile();
-  return await file.text();
-}
-
-// Override saveState
-window.saveState = async function() {
-  try {
-    if (fsState.enabled && fsState.handle) {
-      const text = JSON.stringify(state);
-      await writeFile(fsState.handle, fsState.fileName, text);
-    } else if (__origSaveState) {
-      __origSaveState();
-    }
-  } catch (e) {
-    console.error('saveState FS error:', e);
-    if (__origSaveState) __origSaveState();
-  }
-};
-
-// Override loadState
-window.loadState = async function() {
-  try {
-    if (fsState.enabled && fsState.handle) {
-      const text = await readFile(fsState.handle, fsState.fileName);
-      state = JSON.parse(text);
-    } else if (__origLoadState) {
-      __origLoadState();
-    }
-  } catch (e) {
-    console.error('loadState FS error:', e);
-    if (__origLoadState) __origLoadState();
-  }
-};
+})();
 </script>
 
 </body>
-</html>
+</html></DOCUMENT>
