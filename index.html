@@ -1,4 +1,3 @@
-<DOCUMENT filename="INDEX0010.txt">
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
@@ -7,6 +6,10 @@
 <title>مدیریت باشگاه والیبال</title>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700&display=swap" rel="stylesheet">
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon" href="icon-192.png">
 <style>
   :root {
     --bg: #f4f7fa;
@@ -125,6 +128,24 @@
     font-weight: 600;
     font-size: 14px;
     transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+  }
+  .btn:hover::before {
+    width: 300px;
+    height: 300px;
   }
   .btn:hover {
     transform: translateY(-2px);
@@ -428,9 +449,17 @@
     .topbar > div { width: 100%; }
     .mobile-search { display: block; }
     .profile-actions { grid-template-columns: repeat(2, 1fr); }
-    .players-preview { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .player-row { flex-direction: column; align-items: center; text-align: center; }
-    .meta { text-align: center; }
+    .players-preview { display: flex; flex-direction: row; overflow-x: auto; gap: 10px; padding-bottom: 10px; }
+    .players-preview .player-row { flex: 0 0 150px; flex-direction: column; text-align: center; }
+    .sessions-preview, .payments-preview, .expired-insurances { display: flex; flex-direction: column; gap: 10px; }
+    .modal { max-width: 95%; padding: 10px; }
+    .modal h3 { font-size: 18px; }
+    .form-row { gap: 8px; }
+    .topbar div in #view-sessions { flex-direction: column; }
+    .topbar div in #view-sessions input, select, button { width: 100%; }
+    .card { margin-bottom: 16px; } /* همگام‌سازی باکس‌ها در موبایل با فاصله بهتر */
+    .players-preview .meta { margin-top: 8px; font-size: 12px; } /* اطلاعات زیر عکس در باکس آخرین بازیکنان */
+    .players-preview .player-row { padding: 8px; } /* تنظیم پدینگ برای جلوگیری از خروج از کادر */
   }
   body.mobile-active .controls { display: none !important; }
   body.mobile-active .mobile-menu { display: flex !important; }
@@ -439,50 +468,20 @@
   body.mobile-active .form-row { grid-template-columns: 1fr !important; }
   body.mobile-active .player-row { flex-direction: column !important; align-items: center !important; text-align: center !important; }
   body.mobile-active .meta { text-align: center !important; }
-  body.mobile-active .players-preview { display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+  body.mobile-active .players-preview { display: flex !important; flex-direction: row !important; overflow-x: auto !important; gap: 10px !important; padding-bottom: 10px !important; }
+  body.mobile-active .players-preview .player-row { flex: 0 0 150px !important; flex-direction: column !important; text-align: center !important; }
   body.mobile-active .topbar { flex-direction: column !important; align-items: stretch !important; }
   body.mobile-active .topbar > div { width: 100% !important; }
   body.mobile-active .cal-grid { grid-template-columns: repeat(7, 32px) !important; }
   body.mobile-active .cal-day { width: 32px !important; height: 32px !important; font-size: 13px !important; }
+  body.mobile-active .sessions-preview, .payments-preview, .expired-insurances { display: flex; flex-direction: column; gap: 10px; }
+  body.mobile-active .modal { max-width: 95%; padding: 10px; }
   @media print {
     .no-print { display: none; }
     .modal { box-shadow: none; border: none; }
     .player-row { page-break-inside: avoid; }
   }
 </style>
-
-<!-- PWA -->
-<link rel="manifest" href="./manifest.webmanifest">
-<meta name="theme-color" content="#0ea5e9">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="./icons/icon-192.png">
-<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png">
-<style>
-  /* شناور: دکمه نصب PWA، پایینِ گوشه راست (برای RTL) */
-  .pwa-install-btn {
-    position: fixed;
-    inset-inline-end: 12px; /* در RTL = راست */
-    inset-block-end: 12px;  /* پایین */
-    right: 12px; bottom: 12px; /* پشتیبان مرورگرهای قدیمی */
-    z-index: 9999;
-    display: none;
-    gap: 6px;
-    align-items: center;
-    background: #0ea5e9;
-    color: #fff;
-    border: none;
-    border-radius: 9999px;
-    padding: 10px 14px;
-    font-size: 14px;
-    box-shadow: 0 8px 18px rgba(14,165,233,.35);
-    cursor: pointer;
-  }
-  .pwa-install-btn svg { width: 18px; height: 18px; }
-  @media print { .pwa-install-btn { display: none !important; } }
-</style>
-
 </head>
 <body>
 <div class="wrap">
@@ -545,7 +544,7 @@
               <h3>آخرین بازیکنان</h3>
               <button id="addPlayerBtn" class="btn primary">بازیکن جدید</button>
             </div>
-            <div id="playersPreview" class="players-preview players-grid"></div>
+            <div id="playersPreview" class="players-preview"></div>
             <div style="margin-top: 12px; text-align: center;">
               <button id="showAllPlayersBtn" class="btn">همه بازیکنان</button>
             </div>
@@ -556,7 +555,7 @@
               <h3>آخرین جلسات</h3>
               <button id="addSessionFromHomeBtn" class="btn primary">جلسه جدید</button>
             </div>
-            <div id="sessionsPreview" class="players-preview"></div>
+            <div id="sessionsPreview" class="sessions-preview"></div>
             <div style="margin-top: 12px; text-align: center;">
               <button id="showAllSessionsBtn" class="btn">همه جلسات</button>
             </div>
@@ -566,7 +565,7 @@
             <div class="section-title">
               <h3>آخرین پرداخت‌ها</h3>
             </div>
-            <div id="paymentsPreview" class="players-preview"></div>
+            <div id="paymentsPreview" class="payments-preview"></div>
             <div style="margin-top: 12px; text-align: center;">
               <button id="showAllPaymentsBtn" class="btn">همه پرداخت‌ها</button>
             </div>
@@ -576,7 +575,7 @@
             <div class="section-title">
               <h3>بیمه‌های منقضی</h3>
             </div>
-            <div id="expiredInsurances" class="players-preview"></div>
+            <div id="expiredInsurances" class="expired-insurances"></div>
             <div style="margin-top: 12px; text-align: center;">
               <button id="showAllInsurancesBtn" class="btn danger">مدیریت بیمه‌ها</button>
             </div>
@@ -590,12 +589,13 @@
           <div id="statsContainer" class="stats"></div>
         </div>
 
-        <div style="text-align: center; margin-top: 20px;">
+        <div style="text-align: center; margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
           <button id="backupBtn" class="btn">بک‌آپ گیری</button>
           <button id="restoreBtn" class="btn">وارد کردن بک‌آپ</button>
           <button id="chooseStorageBtn" class="btn">انتخاب محل ذخیره</button>
           <button id="clearDataBtn" class="btn danger">پاک کردن داده‌ها</button>
           <button id="toggleViewBtn" class="btn">تغییر حالت (موبایل/دسکتاپ)</button>
+          <button id="downloadAppBtn" class="btn primary">دانلود برنامه</button>
         </div>
         <div class="settings-section">
           <button id="editSettingsBtn" class="btn">ویرایش تنظیمات</button>
@@ -780,6 +780,15 @@ function jalaliToDate(jalali) {
   let g = jalali_to_gregorian(parts[0], parts[1], parts[2]);
   return new Date(g[0], g[1] - 1, g[2]);
 }
+function calculateMembershipDuration(joinDate) {
+  if (!joinDate) return '—';
+  let join = jalaliToDate(joinDate);
+  let today = new Date();
+  let years = today.getFullYear() - join.getFullYear();
+  let months = today.getMonth() - join.getMonth();
+  if (months < 0 || (months === 0 && today.getDate() < join.getDate())) years--;
+  return years + ' سال';
+}
 
 /* Image Helper */
 function imageFileToDataURL(file, maxKB) {
@@ -903,7 +912,11 @@ function applySettings() {
     theme1: { '--accent': '#ef4444', '--accent-2': '#f97316' },
     theme2: { '--accent': '#8b5cf6', '--accent-2': '#ec4899' },
     theme3: { '--accent': '#10b981', '--accent-2': '#3b82f6' },
-    theme4: { '--accent': '#6366f1', '--accent-2': '#a855f7' }
+    theme4: { '--accent': '#6366f1', '--accent-2': '#a855f7' },
+    theme5: { '--accent': '#f59e0b', '--accent-2': '#fbbf24' }, // نارنجی
+    theme6: { '--accent': '#ec4899', '--accent-2': '#db2777' }, // صورتی
+    theme7: { '--accent': '#22c55e', '--accent-2': '#16a34a' }, // سبز روشن
+    theme8: { '--accent': '#3b82f6', '--accent-2': '#1d4ed8' } // آبی روشن
   };
   let selectedTheme = themes[state.settings.theme] || themes.default;
   Object.keys(selectedTheme).forEach(key => {
@@ -925,6 +938,7 @@ function showView(name) {
 function renderHome() {
   let preview = qs('#playersPreview');
   preview.innerHTML = '';
+  preview.classList.add('players-preview');
   let last6 = state.players.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 6);
   if (last6.length === 0) {
     preview.innerHTML = '<div class="muted" style="padding: 14px; text-align: center;">هنوز بازیکنی ثبت نشده.</div>';
@@ -942,6 +956,7 @@ function renderHome() {
 
   let sessionsPreview = qs('#sessionsPreview');
   sessionsPreview.innerHTML = '';
+  sessionsPreview.classList.add('sessions-preview');
   let lastSessions = state.sessions.slice().sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
   if (lastSessions.length === 0) {
     sessionsPreview.innerHTML = '<div class="muted" style="padding: 14px; text-align: center;">هنوز جلسه‌ای ثبت نشده.</div>';
@@ -959,6 +974,7 @@ function renderHome() {
 
   let paymentsPreview = qs('#paymentsPreview');
   paymentsPreview.innerHTML = '';
+  paymentsPreview.classList.add('payments-preview');
   let lastPayments = state.payments.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 3);
   if (lastPayments.length === 0) {
     paymentsPreview.innerHTML = '<div class="muted" style="padding: 14px; text-align: center;">هنوز پرداختی ثبت نشده.</div>';
@@ -975,6 +991,7 @@ function renderHome() {
 
   let expiredInsurances = qs('#expiredInsurances');
   expiredInsurances.innerHTML = '';
+  expiredInsurances.classList.add('expired-insurances');
   let expired = state.players.filter(p => isInsuranceExpired(p.insuranceDate)).slice(0, 3);
   if (expired.length === 0) {
     expiredInsurances.innerHTML = '<div class="muted" style="padding: 14px; text-align: center;">بیمه منقضی شده‌ای وجود ندارد.</div>';
@@ -1120,27 +1137,13 @@ function renderPlayersPage() {
     let expired = isInsuranceExpired(p.insuranceDate);
     node.innerHTML = `
       <div class="player-thumb">${imgHtml}</div>
-      <div class="meta"><strong>${escapeHtml(p.name)}</strong><small>${p.category || '—'} • سن: ${calcAge(p.birthdate) || '—'} • ${p.favoritePosition || '—'}</small></div>
-      <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-        <div class="badge ${expired ? 'danger' : ''}">${calcAverageScore(p)}</div>
-        <button class="btn small" data-action="view" data-id="${p.id}">پروفایل</button>
-        <button class="btn small" data-action="edit" data-id="${p.id}">ویرایش</button>
-        <button class="btn small" data-action="pay" data-id="${p.id}">پرداخت</button>
-        <button class="btn small" data-action="del" data-id="${p.id}" style="background: transparent;">حذف</button>
+      <div class="meta"><strong>${escapeHtml(p.name)}</strong><small>${p.category || '—'} • سن: ${calcAge(p.birthdate) || '—'}</small></div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn small primary" onclick="openPlayerProfile('${p.id}')">پروفایل</button>
+        <button class="btn small" onclick="openPlayerModal(state.players.find(x => x.id === '${p.id}'))">ویرایش</button>
+        <button class="btn small danger" onclick="if(confirm('حذف شود؟')){ state.players = state.players.filter(x => x.id !== '${p.id}'); saveState(); renderPlayersPage(); renderHome(); }">حذف</button>
       </div>
     `;
-    node.querySelector('[data-action="view"]').addEventListener('click', () => openPlayerProfile(p.id));
-    node.querySelector('[data-action="edit"]').addEventListener('click', () => openPlayerModal(p));
-    node.querySelector('[data-action="pay"]').addEventListener('click', () => openPaymentModal(p.id));
-    node.querySelector('[data-action="del"]').addEventListener('click', () => {
-      if (confirm('حذف بازیکن؟')) {
-        state.players = state.players.filter(x => x.id !== p.id);
-        state.payments = state.payments.filter(x => x.playerId !== p.id);
-        saveState();
-        renderPlayersPage();
-        renderHome();
-      }
-    });
     list.appendChild(node);
   });
   populateCategoryFilter(qs('#filterCategory'));
@@ -1149,111 +1152,24 @@ function renderPlayersPage() {
 function renderCoaches() {
   let list = qs('#coachesList');
   list.innerHTML = '';
-  if (!state.coaches?.length) {
-    list.innerHTML = '<div class="muted">هیچ مربی ثبت نشده.</div>';
+  if (state.coaches.length === 0) {
+    list.innerHTML = '<div class="muted">هیچ مربی‌ای ثبت نشده.</div>';
     return;
   }
+
   state.coaches.forEach(c => {
     let node = document.createElement('div');
     node.className = 'player-row';
     let imgHtml = c.photo ? `<img src="${c.photo}">` : `<svg width="36" height="36" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e2e8f0"/></svg>`;
     node.innerHTML = `
       <div class="player-thumb">${imgHtml}</div>
-      <div class="meta"><strong>${escapeHtml(c.name)}</strong><small>${c.title || ''} • ${c.phone || ''}</small></div>
+      <div class="meta"><strong>${escapeHtml(c.name)}</strong><small>${c.title || '—'} • ${c.phone || '—'}</small></div>
       <div style="display: flex; gap: 8px;">
-        <button class="btn small" data-act="edit" data-id="${c.id}">ویرایش</button>
-        <button class="btn small" data-act="del" data-id="${c.id}" style="background: transparent;">حذف</button>
+        <button class="btn small" onclick="openCoachModal(state.coaches.find(x => x.id === '${c.id}'))">ویرایش</button>
+        <button class="btn small danger" onclick="if(confirm('حذف شود؟')){ state.coaches = state.coaches.filter(x => x.id !== '${c.id}'); saveState(); renderCoaches(); }">حذف</button>
       </div>
     `;
-    node.querySelector('[data-act="edit"]').addEventListener('click', () => openCoachModal(c));
-    node.querySelector('[data-act="del"]').addEventListener('click', () => {
-      if (confirm('حذف مربی؟')) {
-        state.coaches = state.coaches.filter(x => x.id !== c.id);
-        saveState();
-        renderCoaches();
-        renderHome();
-      }
-    });
     list.appendChild(node);
-  });
-}
-
-function fillMonthYear(monthId, yearId, selectedMonth, selectedYear) {
-  let months = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
-  let payM = qs('#' + monthId);
-  payM.innerHTML = '<option value="">ماه</option>';
-  months.forEach((m, i) => {
-    let o = document.createElement('option');
-    o.value = i + 1;
-    o.textContent = m;
-    if (i + 1 == selectedMonth) o.selected = true;
-    payM.appendChild(o);
-  });
-  let payY = qs('#' + yearId);
-  payY.innerHTML = '<option value="">سال</option>';
-  let now = new Date();
-  let j = gregorian_to_jalali(now.getFullYear(), now.getMonth() + 1, now.getDate());
-  let thisYear = j[0];
-  for (let y = 1403; y <= thisYear + 5; y++) {
-    let o = document.createElement('option');
-    o.value = y;
-    o.textContent = y;
-    if (y == selectedYear) o.selected = true;
-    payY.appendChild(o);
-  }
-}
-
-function populatePaymentPlayerSelect(q = '') {
-  let select = qs('#paymentPlayer');
-  select.innerHTML = '<option value="">انتخاب بازیکن</option>';
-  let players = state.players.filter(p => !q || normPersian(p.name).includes(normPersian(q)));
-  players.forEach(p => {
-    let o = document.createElement('option');
-    o.value = p.id;
-    o.textContent = p.name;
-    select.appendChild(o);
-  });
-}
-
-function addPayment(dateStr, amount, type, pMonth, pYear, playerId) {
-  if (!playerId || !amount) return alert('بازیکن و مبلغ را وارد کنید');
-  let payment = {
-    playerId, amount: parseInt(amount), date: jalaliToISO(dateStr), type,
-    paymentMonth: parseInt(pMonth), paymentYear: parseInt(pYear),
-    createdAt: new Date().toISOString()
-  };
-  state.payments.push(payment);
-  saveState();
-  renderPaymentsPage();
-  renderHome();
-}
-
-function renderPaymentsPage() {
-  populatePaymentPlayerSelect(qs('#paymentPlayerSearch').value);
-  fillMonthYear('paymentMonth', 'paymentYear');
-  let list = qs('#paymentList');
-  list.innerHTML = '';
-  let payments = state.payments.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  if (payments.length === 0) {
-    list.innerHTML = '<div class="muted">هیچ پرداختی ثبت نشده.</div>';
-    return;
-  }
-  payments.forEach(pay => {
-    let player = state.players.find(p => p.id === pay.playerId);
-    let row = document.createElement('div');
-    row.className = 'player-row';
-    row.innerHTML = `
-      <div class="meta"><strong>${player ? escapeHtml(player.name) : '—'}</strong><small>${isoToJalali(pay.date)} • ${Number(pay.amount).toLocaleString()} تومان • ${pay.type || '—'} • دوره: ${pay.paymentMonth}/${pay.paymentYear}</small></div>
-      <button class="btn small danger" data-del="${pay.createdAt}">حذف</button>
-    `;
-    row.querySelector('[data-del]').addEventListener('click', () => {
-      if (confirm('حذف پرداخت؟')) {
-        state.payments = state.payments.filter(x => x.createdAt !== pay.createdAt);
-        saveState();
-        renderPaymentsPage();
-      }
-    });
-    list.appendChild(row);
   });
 }
 
@@ -1262,32 +1178,131 @@ function renderSessionsPage() {
   populateCoachSelect(qs('#sessionCoach'));
   let list = qs('#sessionsList');
   list.innerHTML = '';
-  let sessions = state.sessions.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
-  if (sessions.length === 0) {
+  let sorted = state.sessions.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+  if (sorted.length === 0) {
     list.innerHTML = '<div class="muted">هیچ جلسه‌ای ثبت نشده.</div>';
     return;
   }
-  sessions.forEach(s => {
-    let row = document.createElement('div');
-    row.className = 'player-row';
+  sorted.forEach(s => {
     let coach = state.coaches.find(c => c.id === s.coachId);
-    let attendees = Object.values(s.attendances || {}).filter(a => a.present).length;
-    row.innerHTML = `
-      <div class="meta"><strong>${escapeHtml(s.title || 'جلسه تمرین')}</strong><small>${isoToJalali(s.date)} • ${s.category || '—'} • ${coach?.name || 'بدون مربی'} • حاضرین: ${attendees}</small></div>
+    let attCount = Object.values(s.attendances || {}).filter(a => a.present).length;
+    let node = document.createElement('div');
+    node.className = 'player-row';
+    node.innerHTML = `
+      <div class="meta"><strong>${escapeHtml(s.title || 'جلسه تمرین')}</strong><small>${isoToJalali(s.date)} • ${s.category || '—'} • ${coach?.name || 'بدون مربی'}</small></div>
+      <div class="badge">${attCount} شرکت‌کننده</div>
       <div style="display: flex; gap: 8px;">
-        <button class="btn small" data-att="${s.id}">حضور/غیاب</button>
-        <button class="btn small danger" data-del="${s.id}">حذف</button>
+        <button class="btn small primary" onclick="openSessionAttendance('${s.id}')">حضور/غیاب</button>
+        <button class="btn small danger" onclick="if(confirm('حذف شود؟')){ state.sessions = state.sessions.filter(x => x.id !== '${s.id}'); saveState(); renderSessionsPage(); renderHome(); }">حذف</button>
       </div>
     `;
-    row.querySelector('[data-att]').addEventListener('click', () => openSessionAttendance(s.id));
-    row.querySelector('[data-del]').addEventListener('click', () => {
-      if (confirm('حذف جلسه؟')) {
-        state.sessions = state.sessions.filter(x => x.id !== s.id);
-        saveState();
-        renderSessionsPage();
-      }
-    });
-    list.appendChild(row);
+    list.appendChild(node);
+  });
+}
+
+function populatePaymentPlayerSelect(search = '') {
+  let sel = qs('#paymentPlayer');
+  sel.innerHTML = '<option value="">انتخاب بازیکن</option>';
+  let q = normPersian(search.toLowerCase());
+  let filtered = state.players.filter(p => normPersian(p.name).includes(q));
+  filtered.forEach(p => {
+    let o = document.createElement('option');
+    o.value = p.id;
+    o.textContent = p.name;
+    sel.appendChild(o);
+  });
+}
+
+function fillMonthYear(monthId, yearId) {
+  let monthSel = qs('#' + monthId);
+  let yearSel = qs('#' + yearId);
+  monthSel.innerHTML = '';
+  for (let m = 1; m <= 12; m++) {
+    let o = document.createElement('option');
+    o.value = m;
+    o.textContent = String(m).padStart(2, '0');
+    monthSel.appendChild(o);
+  }
+  let curY = new Date().getFullYear() - 621 - 1;  // Approximate Jalali year adjustment
+  yearSel.innerHTML = '';
+  for (let y = curY - 5; y <= curY + 5; y++) {
+    let o = document.createElement('option');
+    o.value = y;
+    o.textContent = y;
+    yearSel.appendChild(o);
+  }
+  monthSel.value = new Date().getMonth() + 1;
+  yearSel.value = curY;
+}
+
+function renderPaymentsPage() {
+  populatePaymentPlayerSelect(qs('#paymentPlayerSearch').value);
+  fillMonthYear('paymentMonth', 'paymentYear');
+  let list = qs('#paymentList');
+  list.innerHTML = '';
+  let sorted = state.payments.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  if (sorted.length === 0) {
+    list.innerHTML = '<div class="muted">هیچ پرداختی ثبت نشده.</div>';
+    return;
+  }
+  sorted.forEach(p => {
+    let player = state.players.find(pl => pl.id === p.playerId);
+    let node = document.createElement('div');
+    node.className = 'player-row';
+    node.innerHTML = `
+      <div class="meta"><strong>${player ? escapeHtml(player.name) : 'نامشخص'}</strong><small>${isoToJalali(p.date)} • ${Number(p.amount).toLocaleString()} تومان • ${p.paymentMonth}/${p.paymentYear} (${p.type || '—'})</small></div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn small" onclick="editPayment('${p.id}')">ویرایش</button>
+        <button class="btn small danger" onclick="if(confirm('حذف شود؟')){ state.payments = state.payments.filter(x => x.id !== '${p.id}'); saveState(); renderPaymentsPage(); renderHome(); }">حذف</button>
+      </div>
+    `;
+    list.appendChild(node);
+  });
+}
+
+function editPayment(paymentId) {
+  let pay = state.payments.find(p => p.id === paymentId);
+  if (!pay) return;
+  let player = state.players.find(pl => pl.id === pay.playerId);
+  let html = `
+    <h3>ویرایش پرداخت برای ${player ? escapeHtml(player.name) : 'نامشخص'}</h3>
+    <div style="display: grid; gap: 12px; margin-top: 12px;">
+      <label for="edit_paymentDate">تاریخ پرداخت (YYYY/MM/DD)</label>
+      <input id="edit_paymentDate" class="jalali-input input" value="${isoToJalali(pay.date)}">
+      <label>دوره پرداخت</label>
+      <div style="display: flex; gap: 8px;">
+        <select id="edit_paymentMonth" class="input"></select>
+        <select id="edit_paymentYear" class="input"></select>
+      </div>
+      <label for="edit_paymentAmount">مبلغ (تومان)</label>
+      <input id="edit_paymentAmount" type="number" value="${pay.amount}" class="input">
+      <label for="edit_paymentType">نوع پرداخت</label>
+      <select id="edit_paymentType" class="input">
+        <option value="">نوع پرداخت</option>
+        <option ${pay.type === 'نقد' ? 'selected' : ''}>نقد</option>
+        <option ${pay.type === 'رسید' ? 'selected' : ''}>رسید</option>
+        <option ${pay.type === 'کارت به کارت' ? 'selected' : ''}>کارت به کارت</option>
+      </select>
+      <div class="form-actions">
+        <button id="saveEditPayment" class="btn primary">ذخیره</button>
+        <button id="cancelEditPayment" class="btn">انصراف</button>
+      </div>
+    </div>
+  `;
+  showModal(html);
+  fillMonthYear('edit_paymentMonth', 'edit_paymentYear');
+  qs('#edit_paymentMonth').value = pay.paymentMonth;
+  qs('#edit_paymentYear').value = pay.paymentYear;
+  qs('#cancelEditPayment').addEventListener('click', hideModal);
+  qs('#saveEditPayment').addEventListener('click', () => {
+    pay.date = jalaliToISO(qs('#edit_paymentDate').value || todayJalali());
+    pay.amount = parseInt(qs('#edit_paymentAmount').value);
+    pay.type = qs('#edit_paymentType').value || '';
+    pay.paymentMonth = parseInt(qs('#edit_paymentMonth').value);
+    pay.paymentYear = parseInt(qs('#edit_paymentYear').value);
+    saveState();
+    hideModal();
+    renderPaymentsPage();
   });
 }
 
@@ -1302,26 +1317,25 @@ function renderInsurancePage() {
   if (status === 'active') arr = arr.filter(p => p.insuranceDate && !isInsuranceExpired(p.insuranceDate));
   if (status === 'expired') arr = arr.filter(p => p.insuranceDate && isInsuranceExpired(p.insuranceDate));
   if (status === 'none') arr = arr.filter(p => !p.insuranceDate);
-  arr.sort((a, b) => a.name.localeCompare(b.name, 'fa'));
   if (arr.length === 0) {
     list.innerHTML = '<div class="muted">موردی یافت نشد.</div>';
     return;
   }
+
   arr.forEach(p => {
     let expired = isInsuranceExpired(p.insuranceDate);
-    let statusBadge = !p.insuranceDate ? '<div class="badge warning">بدون بیمه</div>' :
-      expired ? '<div class="badge danger">منقضی</div>' : '<div class="badge">فعال</div>';
-    let row = document.createElement('div');
-    row.className = 'player-row';
+    let badgeClass = !p.insuranceDate ? 'warning' : expired ? 'danger' : 'accent';
+    let statusText = !p.insuranceDate ? 'بدون بیمه' : expired ? 'منقضی' : 'فعال';
+    let node = document.createElement('div');
+    node.className = 'player-row';
     let imgHtml = p.photo ? `<img src="${p.photo}">` : `<svg width="36" height="36" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e2e8f0"/></svg>`;
-    row.innerHTML = `
+    node.innerHTML = `
       <div class="player-thumb">${imgHtml}</div>
-      <div class="meta"><strong>${escapeHtml(p.name)}</strong><small>${p.category || '—'} • تاریخ بیمه: ${p.insuranceDate || '—'}</small></div>
-      ${statusBadge}
-      <button class="btn small" data-edit="${p.id}">ویرایش بیمه</button>
+      <div class="meta"><strong>${escapeHtml(p.name)}</strong><small>${p.category || '—'} • ${p.insuranceDate || '—'}</small></div>
+      <div class="badge ${badgeClass}">${statusText}</div>
+      <button class="btn small" onclick="openPlayerModal(state.players.find(x => x.id === '${p.id}'))">ویرایش بیمه</button>
     `;
-    row.querySelector('[data-edit]').addEventListener('click', () => openPlayerModal(p));
-    list.appendChild(row);
+    list.appendChild(node);
   });
 }
 
@@ -1339,7 +1353,7 @@ function openPaymentModal(playerId) {
         <select id="modal_paymentYear" class="input"><option value="">سال</option></select>
       </div>
       <label for="modal_paymentAmount">مبلغ (تومان)</label>
-      <input id="modal_paymentAmount" class="input" placeholder="مثال: 500000" type="number" />
+      <input id="modal_paymentAmount" class="input" placeholder="مبلغ" type="number" />
       <label for="modal_paymentType">نوع پرداخت</label>
       <select id="modal_paymentType" class="input"><option value="">نوع پرداخت</option><option>نقد</option><option>رسید</option><option>کارت به کارت</option></select>
       <div class="form-actions">
@@ -1406,8 +1420,8 @@ function openPaymentReportModal() {
       <select id="reportCategory" class="input"><option value="">همه رده‌ها</option></select>
       <label>دوره پرداخت</label>
       <div style="display: flex; gap: 8px;">
-        <select id="reportMonth" class="input"><option value="">ماه</option></select>
-        <select id="reportYear" class="input"><option value="">سال</option></select>
+        <select id="reportMonth" class="input"></select>
+        <select id="reportYear" class="input"></select>
       </div>
       <div class="form-actions">
         <button id="generateReportBtn" class="btn primary">نمایش گزارش</button>
@@ -1676,6 +1690,7 @@ function openPlayerProfile(id) {
   let avgScore = calcAverageScore(p);
   let expired = isInsuranceExpired(p.insuranceDate);
   let insuranceStatus = p.insuranceDate ? (expired ? 'منقضی' : 'فعال') + ` (${p.insuranceDate})` : 'بیمه‌ای ثبت نشده';
+  let membershipDuration = calculateMembershipDuration(p.joinDate);
   let html = `
     <div style="text-align: center;">
       <div style="width: 160px; height: 160px; border-radius: 12px; overflow: hidden; background: #e2e8f0; margin: 0 auto;">
@@ -1694,6 +1709,7 @@ function openPlayerProfile(id) {
         <div><strong>سن:</strong> ${calcAge(p.birthdate) || '—'}</div>
         <div><strong>قد/وزن:</strong> ${p.height || '—'}cm / ${p.weight || '—'}kg</div>
         <div><strong>تاریخ عضویت:</strong> ${p.joinDate || '—'}</div>
+        <div><strong>سابقه عضویت:</strong> ${membershipDuration}</div>
         <div><strong>امتیاز کلی:</strong> <span class="badge">${avgScore}</span></div>
         <div><strong>امتیازات:</strong>
           <div class="score-list">
@@ -1984,6 +2000,10 @@ function openSettingsModal() {
         <option value="theme2" ${state.settings.theme === 'theme2' ? 'selected' : ''}>بنفش/صورتی</option>
         <option value="theme3" ${state.settings.theme === 'theme3' ? 'selected' : ''}>سبز/آبی</option>
         <option value="theme4" ${state.settings.theme === 'theme4' ? 'selected' : ''}>آبی تیره/بنفش</option>
+        <option value="theme5" ${state.settings.theme === 'theme5' ? 'selected' : ''}>نارنجی روشن</option>
+        <option value="theme6" ${state.settings.theme === 'theme6' ? 'selected' : ''}>صورتی تیره</option>
+        <option value="theme7" ${state.settings.theme === 'theme7' ? 'selected' : ''}>سبز روشن</option>
+        <option value="theme8" ${state.settings.theme === 'theme8' ? 'selected' : ''}>آبی روشن</option>
       </select>
       <div>حجم داده‌های ذخیره شده: ${dataSize} KB</div>
       <div class="form-actions">
@@ -2027,6 +2047,7 @@ function showJalaliCalendar(inputEl) {
   calendar.setAttribute('aria-hidden', 'false');
   let top = rect.bottom + window.scrollY + 8;
   let left = rect.left + window.scrollX;
+  if (left + 300 > window.innerWidth) left = window.innerWidth - 300 - 10;
   calendar.style.top = top + 'px';
   calendar.style.left = left + 'px';
   let cur = inputEl.value && inputEl.value.match(/^\d{4}\/\d{2}\/\d{2}$/) ? inputEl.value : todayJalali();
@@ -2180,6 +2201,22 @@ function attachJalaliInputs() {
 
 /* Event Binding & Init */
 document.addEventListener('DOMContentLoaded', () => {
+  // ثبت Service Worker برای PWA
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('Service Worker registered'))
+        .catch(err => console.error('Service Worker registration failed:', err));
+    });
+  }
+
+  // مدیریت نصب PWA
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+  });
+
   qs('#homeBtn').addEventListener('click', () => showView('home'));
   qs('#playersBtn').addEventListener('click', () => showView('players'));
   qs('#coachesBtn').addEventListener('click', () => showView('coaches'));
@@ -2240,15 +2277,26 @@ document.addEventListener('DOMContentLoaded', () => {
   qs('#insuranceCategoryFilter').addEventListener('change', renderInsurancePage);
   qs('#insuranceStatusFilter').addEventListener('change', renderInsurancePage);
   qs('#editSettingsBtn').addEventListener('click', openSettingsModal);
-  qs('#chooseStorageBtn').addEventListener('click', () => {
-    let input = document.createElement('input');
-    input.type = 'file';
-    input.webkitdirectory = true;
-    input.onchange = e => {
-      customStoragePath = e.target.files[0].path;
-      alert('محل ذخیره انتخاب شد: ' + customStoragePath);
-    };
-    input.click();
+  qs('#chooseStorageBtn').addEventListener('click', async () => {
+    if ('showDirectoryPicker' in window) {  // چک API
+      try {
+        const dirHandle = await window.showDirectoryPicker();
+        customStoragePath = dirHandle;  // ذخیره handle
+        alert('محل ذخیره انتخاب شد');
+        // اگر داده‌ها زیاد باشن، به فایل منتقل کن
+        if (localStorage.getItem(STORAGE_KEY)?.length > 5 * 1024 * 1024) {  // بیش از 5MB
+          const fileHandle = await dirHandle.getFileHandle('backup.json', { create: true });
+          const writable = await fileHandle.createWritable();
+          await writable.write(JSON.stringify(state));
+          await writable.close();
+          alert('داده‌ها به فایل منتقل شد');
+        }
+      } catch (err) {
+        alert('خطا در انتخاب دایرکتوری: ' + err.message);
+      }
+    } else {
+      alert('این مرورگر از انتخاب دایرکتوری پشتیبانی نمی‌کند. از localStorage استفاده می‌شود.');
+    }
   });
   qs('#clearDataBtn').addEventListener('click', () => {
     if (confirm('آیا می‌خواهید ابتدا بک‌آپ بگیرید؟')) {
@@ -2324,6 +2372,21 @@ document.addEventListener('DOMContentLoaded', () => {
     renderHome(); // Re-render to adjust layout
   });
 
+  qs('#downloadAppBtn').addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        console.log('User accepted the install prompt');
+      } else {
+        console.log('User dismissed the install prompt');
+      }
+      deferredPrompt = null;
+    } else {
+      alert('برای نصب برنامه، از مرورگر خود استفاده کنید (Add to Home Screen)');
+    }
+  });
+
   applySettings();
   renderHome();
   renderPlayersPage();
@@ -2343,61 +2406,5 @@ window.addEventListener('beforeunload', saveState);
 window.showAllSessions = showAllSessions;
 window.showAllPayments = showAllPayments;
 </script>
-
-<!-- PWA: دکمه نصب و رجیستر سرویس‌ورکر -->
-<button id="installPWA" class="pwa-install-btn" aria-label="نصب اپ">
-  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 3v12m0 0l-4-4m4 4l4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M3 15v3a3 3 0 003 3h12a3 3 0 003-3v-3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>
-  دانلود اپ
-</button>
-<script>
-(function() {
-  // اگر اپ از قبل نصب شده، دکمه را پنهان کنیم
-  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-  const btn = document.getElementById('installPWA');
-  if (isStandalone) { btn && (btn.style.display = 'none'); }
-
-  let deferredPrompt = null;
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    if (btn) btn.style.display = 'flex';
-  });
-
-  window.addEventListener('appinstalled', () => {
-    if (btn) btn.style.display = 'none';
-    deferredPrompt = null;
-    try { localStorage.setItem('pwa_installed', '1'); } catch(e) {}
-  });
-
-  if (btn) {
-    btn.addEventListener('click', async () => {
-      if (!deferredPrompt) {
-        // iOS یا مرورگرهای بدون پشتیبانی
-        alert('برای افزودن به صفحهٔ اصلی، از منوی مرورگر گزینهٔ “Add to Home Screen” را بزنید.');
-        return;
-      }
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      deferredPrompt = null;
-      if (outcome !== 'accepted') {
-        // اگر کاربر منصرف شد، دکمه را به گوشه نگه می‌داریم و مزاحم نمی‌شویم
-        if (btn) btn.style.display = 'flex';
-      } else {
-        if (btn) btn.style.display = 'none';
-      }
-    });
-  }
-
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-      navigator.serviceWorker.register('./sw.js').catch(console.warn);
-    });
-  }
-})();
-</script>
-
 </body>
-</html></DOCUMENT>
+</html>
