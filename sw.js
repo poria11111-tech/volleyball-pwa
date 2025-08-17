@@ -1,6 +1,6 @@
 const CACHE_NAME = "volleyball-cache-v1";
 const urlsToCache = [
-  "/test6.html",
+  "/index.html",
   "/icon-192.png",
   "/icon-512.png",
   "/manifest.json"
